@@ -56,7 +56,7 @@
                 <?= form_error('ktm', '<small class="text-danger">', '</small>'); ?>
             </div>
             <div class="mb-3">
-                <img src="<?= site_url('CaptchaController/generateCaptcha'); ?>" alt="Captcha">
+                <img src="<?= site_url('CaptchaController/generateCaptcha') . '?t=' . time(); ?>" alt="Captcha">
                 <div class="mt-2">
                     <label for="captcha" class="form-label">Masukkan Captcha</label>
                     <input type="text" class="form-control" id="captcha" name="captcha">

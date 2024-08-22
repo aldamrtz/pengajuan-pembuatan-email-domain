@@ -18,12 +18,18 @@ class CaptchaController extends CI_Controller {
         $background_color = imagecolorallocate($image, 255, 255, 255);
         $text_color = imagecolorallocate($image, 0, 0, 0);
         $line_color = imagecolorallocate($image, 64, 64, 64);
-        
+        $noise_color = imagecolorallocate($image, 150, 150, 150); // Warna bintik-bintik
+
         imagefilledrectangle($image, 0, 0, 120, 40, $background_color);
 
         // Menambahkan garis acak
-        for($i = 0; $i < 5; $i++) {
-            imageline($image, rand()%120, rand()%40, rand()%120, rand()%40, $line_color);
+        for ($i = 0; $i < 5; $i++) {
+            imageline($image, rand() % 120, rand() % 40, rand() % 120, rand() % 40, $line_color);
+        }
+
+        // Menambahkan bintik-bintik acak
+        for ($i = 0; $i < 100; $i++) {
+            imagesetpixel($image, rand() % 120, rand() % 40, $noise_color);
         }
 
         // Menambahkan teks captcha
