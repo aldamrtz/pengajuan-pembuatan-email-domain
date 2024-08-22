@@ -14,6 +14,11 @@
                 <?= $this->session->flashdata('success'); ?>
             </div>
         <?php endif; ?>
+        <?php if ($this->session->flashdata('error')): ?>
+            <div class="alert alert-danger">
+                <?= $this->session->flashdata('error'); ?>
+            </div>
+        <?php endif; ?>
         <?= form_open_multipart('EmailController/submit'); ?>
             <div class="mb-3">
                 <label for="nama" class="form-label">Nama</label>
@@ -51,14 +56,15 @@
                 <?= form_error('ktm', '<small class="text-danger">', '</small>'); ?>
             </div>
             <div class="mb-3">
-                <label for="captcha" class="form-label">Captcha</label>
-                <p><?= $captcha; ?></p>
-                <input type="text" class="form-control" id="captcha" name="captcha" value="">
-                <?= form_error('captcha', '<small class="text-danger">', '</small>'); ?>
+                <img src="<?= site_url('CaptchaController/generateCaptcha'); ?>" alt="Captcha">
+                <div class="mt-2">
+                    <label for="captcha" class="form-label">Masukkan Captcha</label>
+                    <input type="text" class="form-control" id="captcha" name="captcha">
+                    <?= form_error('captcha', '<small class="text-danger">', '</small>'); ?>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">Ajukan</button>
+            <button type="submit" class="btn btn-primary">Kirim</button>
         <?= form_close(); ?>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -8,11 +8,11 @@ class EmailController extends CI_Controller {
         $this->load->model('EmailModel');
         $this->load->helper(array('form', 'url'));
         $this->load->library('form_validation');
+        $this->load->library('session');
     }
 
     public function index() {
-        $data['captcha'] = $this->generateCaptcha();
-        $this->load->view('pengajuan_email', $data);
+        $this->load->view('pengajuan_email');
     }
 
     public function submit() {
@@ -22,7 +22,6 @@ class EmailController extends CI_Controller {
         $this->form_validation->set_rules('email_diajukan', 'Email yang Diajukan', 'required|valid_email|callback_checkEmailExistence');
         $this->form_validation->set_rules('email_pengguna', 'Email Pengguna', 'required|valid_email');
 
-        // Cek apakah file KTM diupload
         if (empty($_FILES['ktm']['name'])) {
             $this->form_validation->set_rules('ktm', 'Kartu Tanda Mahasiswa', 'required');
         }
@@ -30,10 +29,8 @@ class EmailController extends CI_Controller {
         $this->form_validation->set_rules('captcha', 'Captcha', 'required|callback_validateCaptcha');
 
         if ($this->form_validation->run() == FALSE) {
-            $data['captcha'] = $this->generateCaptcha();
-            $this->load->view('pengajuan_email', $data);
+            $this->load->view('pengajuan_email');
         } else {
-            // Upload KTM
             $ktm = '';
             if (!empty($_FILES['ktm']['name'])) {
                 $config['upload_path'] = './uploads/';
@@ -45,13 +42,11 @@ class EmailController extends CI_Controller {
                     $uploadData = $this->upload->data();
                     $ktm = $uploadData['file_name'];
                 } else {
-                    // Jika gagal mengupload, tambahkan pesan error
                     $this->session->set_flashdata('error', $this->upload->display_errors());
                     redirect('EmailController');
                 }
             }
 
-            // Menyimpan data ke database
             $data = array(
                 'nama' => $this->input->post('nama'),
                 'nim' => $this->input->post('nim'),
@@ -80,12 +75,6 @@ class EmailController extends CI_Controller {
         }
     }
 
-    public function generateCaptcha() {
-        $captchaStr = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 6);
-        $this->session->set_userdata('captcha', $captchaStr);
-        return $captchaStr;
-    }
-
     public function validateCaptcha($input) {
         if ($input == $this->session->userdata('captcha')) {
             return TRUE;
@@ -99,7 +88,6 @@ class EmailController extends CI_Controller {
         $emailDomain = '@if.unjani.ac.id';
         $fullEmail = $emailPrefix . $emailDomain;
 
-        // Check if the email already exists and append number if necessary
         $counter = 1;
         while ($this->EmailModel->isEmailExist($fullEmail)) {
             $fullEmail = $emailPrefix . $counter . $emailDomain;

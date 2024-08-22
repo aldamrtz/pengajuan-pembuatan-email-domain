@@ -2,11 +2,14 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class EmailModel extends CI_Model {
-
+    public function __construct() {
+        parent::__construct();
+        $this->load->database();
+    }
+    
     public function insert($data) {
-        // Periksa apakah NIM sudah ada
         if ($this->db->get_where('pengajuan_email', ['nim' => $data['nim']])->num_rows() > 0) {
-            return FALSE; // NIM sudah ada, tidak bisa disimpan
+            return FALSE;
         } else {
             return $this->db->insert('pengajuan_email', $data);
         }
