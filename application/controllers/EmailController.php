@@ -78,7 +78,7 @@ class EmailController extends CI_Controller {
             redirect('EmailController');
         }
     }
-
+    
     public function checkEmailExistence($email) {
         if ($this->EmailModel->isEmailExist($email)) {
             $this->form_validation->set_message('checkEmailExistence', 'Email yang diajukan sudah ada, silakan coba email lain.');
@@ -102,31 +102,30 @@ class EmailController extends CI_Controller {
     }
 
     public function check_email_availability() {
-    $email_prefix = $this->input->post('email_diajukan');
-    $email_full = $email_prefix . '@if.unjani.ac.id';
+        $email_prefix = $this->input->post('email_diajukan');
+        $email_full = $email_prefix . '@if.unjani.ac.id';
 
-    if ($this->EmailModel->isEmailExist($email_full)) {
-        // Generate alternative usernames
-        $suggestions = [];
-        $counter = 1;
-        while(count($suggestions) < 3) {
-            $new_username = $email_prefix . $counter;
-            $new_email = $new_username . '@if.unjani.ac.id';
-            if (!$this->EmailModel->isEmailExist($new_email)) {
-                $suggestions[] = $new_username;
+        if ($this->EmailModel->isEmailExist($email_full)) {
+            // Generate alternative usernames
+            $suggestions = [];
+            $counter = 1;
+            while(count($suggestions) < 3) {
+                $new_username = $email_prefix . $counter;
+                $new_email = $new_username . '@if.unjani.ac.id';
+                if (!$this->EmailModel->isEmailExist($new_email)) {
+                    $suggestions[] = $new_username;
+                }
+                $counter++;
             }
-            $counter++;
+
+            echo json_encode([
+                'status' => 'taken',
+                'suggestions' => $suggestions
+            ]);
+        } else {
+            echo json_encode(['status' => 'available']);
         }
-
-        echo json_encode([
-            'status' => 'taken',
-            'suggestions' => $suggestions
-        ]);
-    } else {
-        echo json_encode(['status' => 'available']);
     }
-}
-
 
     public function validateCaptcha($input) {
         if ($input == $this->session->userdata('captcha')) {

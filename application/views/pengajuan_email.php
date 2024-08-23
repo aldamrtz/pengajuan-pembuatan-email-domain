@@ -80,16 +80,14 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-    <label for="email_diajukan" class="form-label">Email yang Diajukan</label>
-    <div class="input-group">
-        <input type="text" class="form-control" id="email_diajukan" name="email_diajukan" placeholder="Contoh: alda.azza" value="<?= set_value('email_diajukan'); ?>" required>
-        <span class="input-group-text">@if.unjani.ac.id</span>
-    </div>
-    <div id="emailFeedback"></div>
-    <div id="emailSuggestions"></div>
-</div>
-
-
+                                <label for="email_diajukan" class="form-label">Email yang Diajukan</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="email_diajukan" name="email_diajukan" value="<?= set_value('email_diajukan'); ?>" required>
+                                    <span class="input-group-text">@if.unjani.ac.id</span>
+                                </div>
+                                <div id="emailFeedback"></div>
+                                <div id="emailSuggestions"></div>
+                            </div>
                             <div class="col-md-6">
                                 <label for="email_pengguna" class="form-label">Email Pengguna</label>
                                 <input type="email" class="form-control" id="email_pengguna" name="email_pengguna" value="<?= set_value('email_pengguna'); ?>" required>
@@ -113,34 +111,32 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function() {
-    $('#email_diajukan').on('keyup', function() {
-        var email_diajukan = $(this).val();
-        if(email_diajukan) {
-            $.ajax({
-                url: '<?= base_url('check_email_availability'); ?>',
-                type: 'POST',
-                data: {email_diajukan: email_diajukan},
-                dataType: 'json',
-                success: function(response) {
-                    if(response.status === 'taken') {
-                        $('#emailFeedback').text('That email is taken, try another.').css('color', 'red');
-                        $('#emailSuggestions').html('Available: ' + response.suggestions.join(', ')).css('color', 'green');
-                    } else {
-                        $('#emailFeedback').text('Email is available').css('color', 'green');
-                        $('#emailSuggestions').empty();
-                    }
+    <script>
+        $(document).ready(function() {
+            $('#email_diajukan').on('keyup', function() {
+                var email_diajukan = $(this).val();
+                if(email_diajukan) {
+                    $.ajax({
+                        url: '<?= base_url('check_email_availability'); ?>',
+                        type: 'POST',
+                        data: {email_diajukan: email_diajukan},
+                        dataType: 'json',
+                        success: function(response) {
+                            if(response.status === 'taken') {
+                                $('#emailFeedback').text('That email is taken, try another.').css('color', 'red');
+                                $('#emailSuggestions').html('Available: ' + response.suggestions.join(', ')).css('color', 'green');
+                            } else {
+                                $('#emailFeedback').text('Email is available').css('color', 'green');
+                                $('#emailSuggestions').empty();
+                            }
+                        }
+                    });
+                } else {
+                    $('#emailFeedback').empty();
+                    $('#emailSuggestions').empty();
                 }
             });
-        } else {
-            $('#emailFeedback').empty();
-            $('#emailSuggestions').empty();
-        }
-    });
-});
-</script>
-
-
+        });
+    </script>
 </body>
 </html>
