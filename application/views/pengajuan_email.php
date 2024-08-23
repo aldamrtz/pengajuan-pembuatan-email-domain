@@ -5,66 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pengajuan Email</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-vWmp6s/XFzVGm8LCx6RtSx/1PfgI3rU2W5W2HZFYJf5kIVnx6hU19Y8ftAA0ItyI/lh4HzC/tk6D4VEfxXXITw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="icon" href="./assets/img/Unjani.png" type="image/png">
+    <style>
+        body {
+            background-image: linear-gradient(180deg, #1cc88a 10%, #13855c 100%);
+            font-size: 0.875rem;
+        }
+        .form-container {
+            display: flex;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-wrapper {
+            max-width: 100%;
+            width: 100%;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 0.875rem;
+        }
+        .form-control, .btn {
+            font-size: 0.875rem;
+            padding: 0.375rem 0.75rem;
+            height: auto;
+        }
+        .form-label {
+            font-size: 0.875rem;
+        }
+        .form-select {
+            font-size: 0.875rem;
+        }
+        .form-control::placeholder {
+            font-size: 0.875rem;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h2>Form Pengajuan Pembuatan Email</h2>
-        <?php if ($this->session->flashdata('success')): ?>
-            <div class="alert alert-success">
-                <?= $this->session->flashdata('success'); ?>
-            </div>
-        <?php endif; ?>
-        <?php if ($this->session->flashdata('error')): ?>
-            <div class="alert alert-danger">
-                <?= $this->session->flashdata('error'); ?>
-            </div>
-        <?php endif; ?>
-        <?= form_open_multipart('EmailController/submit'); ?>
-            <div class="mb-3">
-                <label for="nama" class="form-label">Nama</label>
-                <input type="text" class="form-control" id="nama" name="nama" value="<?= set_value('nama'); ?>">
-                <?= form_error('nama', '<small class="text-danger">', '</small>'); ?>
-            </div>
-            <div class="mb-3">
-                <label for="nim" class="form-label">Nomor Induk Mahasiswa (NIM)</label>
-                <input type="text" class="form-control" id="nim" name="nim" value="<?= set_value('nim'); ?>">
-                <?= form_error('nim', '<small class="text-danger">', '</small>'); ?>
-            </div>
-            <div class="mb-3">
-                <label for="prodi" class="form-label">Program Studi</label>
-                <select class="form-control" id="prodi" name="prodi">
-                    <option value="">Pilih Program Studi</option>
-                    <option value="Informatika">Informatika</option>
-                    <option value="Sistem Informasi">Sistem Informasi</option>
-                    <!-- Tambahkan program studi lainnya di sini -->
-                </select>
-                <?= form_error('prodi', '<small class="text-danger">', '</small>'); ?>
-            </div>
-            <div class="mb-3">
-                <label for="email_diajukan" class="form-label">Email yang Diajukan</label>
-                <input type="text" class="form-control" id="email_diajukan" name="email_diajukan" placeholder="Contoh: alda.azza" value="<?= set_value('email_diajukan'); ?>">
-                <?= form_error('email_diajukan', '<small class="text-danger">', '</small>'); ?>
-            </div>
-            <div class="mb-3">
-                <label for="email_pengguna" class="form-label">Email Pengguna</label>
-                <input type="email" class="form-control" id="email_pengguna" name="email_pengguna" value="<?= set_value('email_pengguna'); ?>">
-                <?= form_error('email_pengguna', '<small class="text-danger">', '</small>'); ?>
-            </div>
-            <div class="mb-3">
-                <label for="ktm" class="form-label">Kartu Tanda Mahasiswa (KTM)</label>
-                <input type="file" class="form-control" id="ktm" name="ktm">
-                <?= form_error('ktm', '<small class="text-danger">', '</small>'); ?>
-            </div>
-            <div class="mb-3">
-                <img src="<?= site_url('CaptchaController/generateCaptcha') . '?t=' . time(); ?>" alt="Captcha">
-                <div class="mt-2">
-                    <label for="captcha" class="form-label">Masukkan Captcha</label>
-                    <input type="text" class="form-control" id="captcha" name="captcha">
-                    <?= form_error('captcha', '<small class="text-danger">', '</small>'); ?>
+    <div class="container-fluid">
+        <div class="row form-container justify-content-center">
+            <div class="col-md-8">
+                <div class="form-wrapper">
+                    <h2>Form Pengajuan Pembuatan Email</h2>
+                    <?php if ($this->session->flashdata('success')): ?>
+                        <div class="alert alert-success">
+                            <?= $this->session->flashdata('success'); ?>
+                        </div>
+                    <?php endif; ?>
+                    <?php if ($this->session->flashdata('error')): ?>
+                        <div class="alert alert-danger">
+                            <?= $this->session->flashdata('error'); ?>
+                        </div>
+                    <?php endif; ?>
+                    <?= form_open_multipart('EmailController/submit'); ?>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="nama" class="form-label">Nama</label>
+                                <input type="text" class="form-control" id="nama" name="nama" value="<?= set_value('nama'); ?>" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="nim" class="form-label">Nomor Induk Mahasiswa (NIM)</label>
+                                <input type="text" class="form-control" id="nim" name="nim" value="<?= set_value('nim'); ?>" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="prodi" class="form-label">Program Studi</label>
+                            <select class="form-control" id="prodi" name="prodi" required>
+                                <option value="">Pilih Program Studi</option>
+                                <option value="Informatika">Informatika</option>
+                                <option value="Sistem Informasi">Sistem Informasi</option>
+                                <!-- Tambahkan program studi lainnya di sini -->
+                            </select>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="email_diajukan" class="form-label">Email yang Diajukan</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="email_diajukan" name="email_diajukan" placeholder="Contoh: alda.azza" value="<?= set_value('email_diajukan'); ?>" required>
+                                    <span class="input-group-text">@if.unjani.ac.id</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email_pengguna" class="form-label">Email Pengguna</label>
+                                <input type="email" class="form-control" id="email_pengguna" name="email_pengguna" value="<?= set_value('email_pengguna'); ?>" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ktm" class="form-label">Kartu Tanda Mahasiswa (KTM)</label>
+                            <input type="file" class="form-control" id="ktm" name="ktm" required>
+                        </div>
+                        <div class="mb-3">
+                            <img src="<?= site_url('CaptchaController/generateCaptcha') . '?t=' . time(); ?>" alt="Captcha">
+                            <div class="mt-2">
+                                <label for="captcha" class="form-label">Masukkan Captcha</label>
+                                <input type="text" class="form-control" id="captcha" name="captcha" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Kirim</button>
+                    <?= form_close(); ?>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Kirim</button>
-        <?= form_close(); ?>
+        </div>
     </div>
 </body>
 </html>

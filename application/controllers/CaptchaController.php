@@ -14,22 +14,24 @@ class CaptchaController extends CI_Controller {
         header("Content-type: image/png");
 
         // Membuat gambar
-        $image = imagecreatetruecolor(120, 40);
+        $width = 120;
+        $height = 40;
+        $image = imagecreatetruecolor($width, $height);
         $background_color = imagecolorallocate($image, 255, 255, 255);
         $text_color = imagecolorallocate($image, 0, 0, 0);
         $line_color = imagecolorallocate($image, 64, 64, 64);
-        $noise_color = imagecolorallocate($image, 150, 150, 150); // Warna bintik-bintik
+        $dot_color = imagecolorallocate($image, 150, 150, 150);
 
-        imagefilledrectangle($image, 0, 0, 120, 40, $background_color);
+        imagefilledrectangle($image, 0, 0, $width, $height, $background_color);
 
         // Menambahkan garis acak
-        for ($i = 0; $i < 5; $i++) {
-            imageline($image, rand() % 120, rand() % 40, rand() % 120, rand() % 40, $line_color);
+        for($i = 0; $i < 5; $i++) {
+            imageline($image, rand()%$width, rand()%$height, rand()%$width, rand()%$height, $line_color);
         }
 
         // Menambahkan bintik-bintik acak
-        for ($i = 0; $i < 100; $i++) {
-            imagesetpixel($image, rand() % 120, rand() % 40, $noise_color);
+        for($i = 0; $i < 100; $i++) {
+            imagesetpixel($image, rand()%$width, rand()%$height, $dot_color);
         }
 
         // Menambahkan teks captcha

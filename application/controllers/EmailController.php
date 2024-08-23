@@ -16,12 +16,25 @@ class EmailController extends CI_Controller {
     }
 
     public function submit() {
+        // Dapatkan input dari user
+        $email_diajukan = $this->input->post('email_diajukan');
+        
+        // Tambahkan domain @if.unjani.ac.id jika belum ada
+        if (strpos($email_diajukan, '@if.unjani.ac.id') === false) {
+            $email_diajukan .= '@if.unjani.ac.id';
+        }
+        
+        // Set input email yang sudah ditambahkan domain
+        $_POST['email_diajukan'] = $email_diajukan;
+
+        // Validasi form
         $this->form_validation->set_rules('nama', 'Nama', 'required');
         $this->form_validation->set_rules('nim', 'Nomor Induk Mahasiswa', 'required');
         $this->form_validation->set_rules('prodi', 'Program Studi', 'required');
         $this->form_validation->set_rules('email_diajukan', 'Email yang Diajukan', 'required|valid_email|callback_checkEmailExistence');
         $this->form_validation->set_rules('email_pengguna', 'Email Pengguna', 'required|valid_email');
 
+        // Validasi file KTM
         if (empty($_FILES['ktm']['name'])) {
             $this->form_validation->set_rules('ktm', 'Kartu Tanda Mahasiswa', 'required');
         }
@@ -51,7 +64,7 @@ class EmailController extends CI_Controller {
                 'nama' => $this->input->post('nama'),
                 'nim' => $this->input->post('nim'),
                 'prodi' => $this->input->post('prodi'),
-                'email_diajukan' => $this->generateEmail($this->input->post('email_diajukan')),
+                'email_diajukan' => $email_diajukan,
                 'email_pengguna' => $this->input->post('email_pengguna'),
                 'ktm' => $ktm
             );
@@ -96,5 +109,6 @@ class EmailController extends CI_Controller {
 
         return $fullEmail;
     }
+
 }
 ?>
