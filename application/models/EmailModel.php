@@ -16,9 +16,11 @@ class EmailModel extends CI_Model {
     }
 
     public function isEmailExist($email) {
-        $this->db->where('email_diajukan', $email);
-        $query = $this->db->get('pengajuan_email');
-        return $query->num_rows() > 0;
-    }
+    $this->db->where('email_diajukan', $email);
+    $query = $this->db->get('pengajuan_email');
+    return $query->num_rows() > 0;
+}
+
+    
 }
 ?>
