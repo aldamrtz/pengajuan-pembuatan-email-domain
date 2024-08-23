@@ -12,7 +12,8 @@ class EmailController extends CI_Controller {
     }
 
     public function index() {
-        $this->load->view('pengajuan_email');
+        $data['program_studi'] = $this->EmailModel->getProgramStudi();
+        $this->load->view('pengajuan_email', $data);
     }
 
     public function submit() {

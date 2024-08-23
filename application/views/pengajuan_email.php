@@ -6,6 +6,10 @@
     <title>Pengajuan Email</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-vWmp6s/XFzVGm8LCx6RtSx/1PfgI3rU2W5W2HZFYJf5kIVnx6hU19Y8ftAA0ItyI/lh4HzC/tk6D4VEfxXXITw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
     <link rel="icon" href="./assets/img/Unjani.png" type="image/png">
     <style>
         body {
@@ -40,6 +44,9 @@
         .form-control::placeholder {
             font-size: 0.875rem;
         }
+        .btn-primary {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -71,11 +78,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="prodi" class="form-label">Program Studi</label>
-                            <select class="form-control" id="prodi" name="prodi" required>
+                            <select class="form-select" id="prodi" name="prodi" required>
                                 <option value="">Pilih Program Studi</option>
-                                <option value="Informatika">Informatika</option>
-                                <option value="Sistem Informasi">Sistem Informasi</option>
-                                <!-- Tambahkan program studi lainnya di sini -->
+                                <?php foreach ($program_studi as $value => $label): ?>
+                                    <option value="<?= $value; ?>"><?= $label; ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="row mb-3">
