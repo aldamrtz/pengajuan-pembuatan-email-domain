@@ -21,6 +21,9 @@
             align-items: center;
             height: 100vh;
         }
+        .title {
+            text-align: center;
+        }
         .form-wrapper {
             max-width: 100%;
             width: 100%;
@@ -54,7 +57,7 @@
         <div class="row form-container justify-content-center">
             <div class="col-md-8">
                 <div class="form-wrapper">
-                    <h2>Form Pengajuan Pembuatan Email</h2>
+                    <h2 class="title">Form Pengajuan Pembuatan Email</h2>
                     <?php if ($this->session->flashdata('success')): ?>
                         <div class="alert alert-success">
                             <?= $this->session->flashdata('success'); ?>
