@@ -11,6 +11,9 @@ class EmailModel extends CI_Model {
         if ($this->db->get_where('pengajuan_email', ['nim' => $data['nim']])->num_rows() > 0) {
             return FALSE;
         } else {
+            if (!isset($data['tgl_Pengajuan'])) {
+                $data['tgl_pengajuan'] = date('Y-m-d');
+            }
             return $this->db->insert('pengajuan_email', $data);
         }
     }
