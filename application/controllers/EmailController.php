@@ -22,9 +22,13 @@ class EmailController extends CI_Controller {
         $program_studi = $this->input->post('prodi');
 
         // Tambahkan domain berdasarkan program studi
-        $domain = $this->getDomainByProdi($program_studi);
-        if (strpos($email_diajukan, $domain) === false) {
-            $email_diajukan .= $domain;
+        if ($this->input->post('email_option') == 'custom') {
+            $domain = $this->getDomainByProdi($program_studi);
+            if (strpos($email_diajukan, $domain) === false) {
+                $email_diajukan .= $domain;
+            }
+        } else {
+            $email_diajukan = '';
         }
         
         // Set input email yang sudah ditambahkan domain
@@ -57,11 +61,12 @@ class EmailController extends CI_Controller {
 
         if ($this->form_validation->run() == FALSE) {
             $data['program_studi'] = $this->EmailModel->getProgramStudi();
+            $data['form_data'] = $this->input->post();
             $this->load->view('pengajuan_email', $data);
         } else {
             $ktm = '';
             if (!empty($_FILES['ktm']['name'])) {
-                $config['upload_path'] = './uploads/';
+                $config['upload_path'] = './uploads/ktm/';
                 $config['allowed_types'] = 'jpg|jpeg|png|pdf';
                 $config['file_name'] = $this->input->post('nim').'_ktm';
                 $this->load->library('upload', $config);
@@ -92,9 +97,34 @@ class EmailController extends CI_Controller {
                 $this->session->set_flashdata('error', 'Pengajuan gagal. NIM sudah terdaftar.');
             }
 
+            $this->load->model('NotificationModel');
+            $notification_data = [
+                'user' => $this->input->post('email_pengguna'),
+                'type' => 'email',
+            ];
+            $this->NotificationModel->insertNotification($notification_data);
+
             redirect('EmailController');
         }
     }
+
+    public function validateEmailDiajukan($email) {
+        $lengthPattern = '/^.{6,30}$/';
+        $contentPattern = '/^[a-zA-Z0-9.]+$/';
+
+        if (!preg_match($lengthPattern, $email)) {
+            $this->form_validation->set_message('validateEmailDiajukan', 'Email yang diajukan harus terdiri dari 6-30 karakter.');
+            return FALSE;
+        }
+
+        if (!preg_match($contentPattern, $email)) {
+            $this->form_validation->set_message('validateEmailDiajukan', 'Hanya berisi huruf, angka, atau titik yang diizinkan.');
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+
     
     public function checkEmailExistence($email) {
         if ($this->EmailModel->isEmailExist($email)) {

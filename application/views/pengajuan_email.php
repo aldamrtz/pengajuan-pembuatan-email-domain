@@ -11,7 +11,8 @@
     <style>
         body {
             background-image: linear-gradient(180deg, #1cc88a 10%, #13855c 100%);
-            font-size: 0.875rem;
+            background-size: cover;
+            background-attachment: fixed;
         }
         .form-container {
             display: flex;
@@ -21,6 +22,9 @@
         .title {
             text-align: center;
         }
+        .container-fluid {
+            padding: 20px;
+        }
         .form-wrapper {
             max-width: 100%;
             width: 100%;
@@ -28,21 +32,10 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            font-size: 0.875rem;
         }
         .form-control, .btn {
-            font-size: 0.875rem;
             padding: 0.375rem 0.75rem;
             height: auto;
-        }
-        .form-label {
-            font-size: 0.875rem;
-        }
-        .form-select {
-            font-size: 0.875rem;
-        }
-        .form-control::placeholder {
-            font-size: 0.875rem;
         }
         .btn-primary {
             width: 100%;
@@ -60,14 +53,14 @@
         #emailSuggestions input[type="radio"] {
             margin-right: 0.25rem;
         }
-        .feedback {
-            font-size: 0.875rem;
-        }
         .feedback.error {
             color: red;
         }
         .feedback.success {
             color: green;
+        }
+        .captcha-container {
+            text-align: center;
         }
     </style>
 </head>
@@ -76,17 +69,7 @@
         <div class="row form-container justify-content-center">
             <div class="col-md-8">
                 <div class="form-wrapper">
-                    <h2 class="title">Form Pengajuan Pembuatan Email</h2>
-                    <?php if ($this->session->flashdata('success')): ?>
-                        <div class="alert alert-success">
-                            <?= $this->session->flashdata('success'); ?>
-                        </div>
-                    <?php endif; ?>
-                    <?php if ($this->session->flashdata('error')): ?>
-                        <div class="alert alert-danger">
-                            <?= $this->session->flashdata('error'); ?>
-                        </div>
-                    <?php endif; ?>
+                    <h2 class="title">Pengajuan Pembuatan Email</h2>
                     <?= form_open_multipart('EmailController/submit'); ?>
                         <div class="row mb-3">
                             <div class="col-md-6">
@@ -98,7 +81,7 @@
                                 <select class="form-select" id="prodi" name="prodi" required>
                                     <option value="">Pilih Program Studi</option>
                                     <?php foreach ($program_studi as $value => $label): ?>
-                                        <option value="<?= $value; ?>"><?= $label; ?></option>
+                                        <option value="<?= $value; ?>" <?= set_select('prodi', $value); ?>><?= $label; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -117,19 +100,20 @@
                             <div id="emailSuggestions">
                             </div>
                             <div>
-                                <input type="radio" id="customEmail" name="email_option" value="custom">
+                                <input type="radio" id="customEmail" name="email_option" value="custom" <?= set_radio('email_option', 'custom'); ?>>
                                 <label for="customEmail">Buat email Anda sendiri</label>
                             </div>
                         </div>
                         <div id="customEmailField" class="email-options">
                             <div class="mb-3">
-                                <label for="email_diajukan" class="form-label">Email yang Diajukan</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="email_diajukan" name="email_diajukan" value="<?= set_value('email_diajukan'); ?>" required>
-                                    <span class="input-group-text" id="emailDomain">@if.unjani.ac.id</span>
-                                </div>
-                                <div id="emailFeedback"></div>
+                            <label for="email_diajukan" class="form-label">Email yang Diajukan</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="email_diajukan" name="email_diajukan" value="<?= set_value('email_diajukan'); ?>" required>
+                                <span class="input-group-text" id="emailDomain">@if.unjani.ac.id</span>
                             </div>
+                            <div id="emailValidationFeedback" class="feedback"></div>
+                            <div id="emailAvailabilityFeedback" class="feedback"></div>
+                        </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
@@ -141,7 +125,7 @@
                                 <input type="file" class="form-control" id="ktm" name="ktm" required>
                             </div>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 captcha-container">
                             <img src="<?= site_url('CaptchaController/generateCaptcha') . '?t=' . time(); ?>" alt="Captcha">
                             <div class="mt-2">
                                 <label for="captcha" class="form-label">Masukkan Captcha</label>
@@ -154,12 +138,68 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel">Pesan</h5>
+                </div>
+                <div class="modal-body">
+                    <!-- Pesan akan di sini -->
+                    <?php if ($this->session->flashdata('success')): ?>
+                        <p class="text-success"><?= $this->session->flashdata('success'); ?></p>
+                    <?php elseif ($this->session->flashdata('error')): ?>
+                        <p class="text-danger"><?= $this->session->flashdata('error'); ?></p>
+                    <?php endif; ?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#email_diajukan').on('input', function() {
-                var emailPrefix = $(this).val();
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailInput = document.getElementById('email_diajukan');
+            const validationFeedback = document.getElementById('emailValidationFeedback');
+            const availabilityFeedback = document.getElementById('emailAvailabilityFeedback');
+            const customEmailOption = document.getElementById('customEmail');
+            const emailSuggestions = document.getElementById('emailSuggestions');
+
+            customEmailOption.addEventListener('change', function () {
+                if (this.checked) {
+                    document.getElementById('customEmailField').style.display = 'block';
+                    emailInput.value = ''; // Clear value when switching to custom email
+                }
+            });
+
+            emailInput.addEventListener('input', function() {
+                const emailValue = emailInput.value;
+                const lengthPattern = /^.{6,30}$/; // Untuk memeriksa panjang karakter
+                const contentPattern = /^[a-zA-Z0-9.]+$/; // Untuk memeriksa karakter yang diizinkan
+
+                if (!lengthPattern.test(emailValue)) {
+                    validationFeedback.textContent = 'Email yang diajukan harus terdiri dari 6-30 karakter.';
+                    validationFeedback.className = 'feedback error';
+                    availabilityFeedback.textContent = ''; // Clear availability feedback
+                } else if (!contentPattern.test(emailValue)) {
+                    validationFeedback.textContent = 'Hanya berisi huruf, angka, atau titik yang diizinkan.';
+                    validationFeedback.className = 'feedback error';
+                    availabilityFeedback.textContent = ''; // Clear availability feedback
+                } else {
+                    validationFeedback.textContent = '';
+                    // Check email availability if validation passes
+                    checkEmailAvailability(emailValue);
+                }
+            });
+
+            function checkEmailAvailability(emailPrefix) {
                 var prodi = $('#prodi').val();
                 if (emailPrefix.length > 0) {
                     $.ajax({
@@ -173,26 +213,23 @@
                             nama_belakang: $('#nama_belakang').val()
                         },
                         success: function(response) {
-                            var feedback = '';
-                            var suggestionsHtml = '';
+                            var availabilityFeedback = '';
                             if (response.status === 'taken') {
-                                feedback = '<span class="feedback error">Email sudah terdaftar</span><br>';
+                                availabilityFeedback = '<span class="feedback error">Email sudah terdaftar</span><br>';
                                 if (response.suggestions.length > 0) {
-                                    suggestionsHtml = '<br><span class="feedback success">Saran Email: </span>';
-                                    response.suggestions.forEach(function(suggestion) {
-                                        suggestionsHtml = '<span class="feedback success">Saran Email: ' + response.suggestions.join(', ') + '</span>';
-                                    });
+                                    var suggestionsHtml = '<span class="feedback success">Saran Email: ' + response.suggestions.join(', ') + '</span>';
+                                    availabilityFeedback += suggestionsHtml;
                                 }
                             } else {
-                                feedback = '<span class="feedback success">Email tersedia</span>';
+                                availabilityFeedback = '<span class="feedback success">Email tersedia</span>';
                             }
-                            $('#emailFeedback').html(feedback + suggestionsHtml);
+                            $('#emailAvailabilityFeedback').html(availabilityFeedback);
                         }
                     });
                 } else {
-                    $('#emailFeedback').empty();
+                    $('#emailAvailabilityFeedback').empty();
                 }
-            });
+            }
 
             $('#prodi').on('change', function() {
                 $('#email_diajukan').trigger('input');
@@ -272,6 +309,15 @@
 
             updateDomain();
             toggleEmailField();
+
+            <?php if ($this->session->flashdata('success') || $this->session->flashdata('error')): ?>
+                var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+                messageModal.show();
+
+                document.getElementById('messageModal').addEventListener('hidden.bs.modal', function () {
+                    location.reload();
+                });
+            <?php endif; ?>
         });
     </script>
 </body>

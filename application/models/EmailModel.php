@@ -31,5 +31,20 @@ class EmailModel extends CI_Model {
             // Add more programs as needed
         ];
     }
+
+    public function getAllPengajuan() {
+        $query = $this->db->get('pengajuan_email');
+        return $query->result_array();
+    }
+
+    public function getPengajuanByStatus($status) {
+        $this->db->where('status_pengajuan', $status);
+        return $this->db->get('pengajuan_email')->result_array();
+    }
+
+    public function updateStatus($id, $status) {
+        $this->db->where('nim', $id);
+        $this->db->update('pengajuan_email', array('status_pengajuan' => $status));
+    }
 }
 ?>

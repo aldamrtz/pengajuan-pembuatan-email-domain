@@ -8,24 +8,43 @@ class DomainModel extends CI_Model {
     }
     
     public function insert($data) {
-        return $this->db->insert('pengajuan_domain', $data);
+        if ($this->db->get_where('pengajuan_domain', ['nomor_induk' => $data['nomor_induk']])->num_rows() > 0) {
+            return FALSE;
+        } else {
+            if (!isset($data['tgl_pengajuan'])) {
+                $data['tgl_pengajuan'] = date('Y-m-d');
+            }
+            return $this->db->insert('pengajuan_domain', $data);
+        }
     }
 
-    public function isDomainExist($domain) {
-        $this->db->where('sub_domain', $domain);
+    public function isSubDomainExist($sub_domain) {
+        $this->db->where('sub_domain', $sub_domain);
         $query = $this->db->get('pengajuan_domain');
         return $query->num_rows() > 0;
     }
 
-    public function getUnits() {
-        // Daftar unit kerja yang bisa dipilih
+    public function getUnitKerja() {
         return [
-            'Informatika',
-            'Sistem Informasi',
-            'Fakultas Teknik',
-            'Himpunan Mahasiswa'
-            // Tambahkan unit kerja lainnya di sini
+            'Informatika' => 'Informatika',
+            'Sistem Informasi' => 'Sistem Informasi',
+            // Add more units as needed
         ];
+    }
+
+    public function getAllPengajuan() {
+        $query = $this->db->get('pengajuan_domain');
+        return $query->result_array();
+    }
+
+    public function getPengajuanByStatus($status) {
+        $this->db->where('status_pengajuan', $status);
+        return $this->db->get('pengajuan_domain')->result_array();
+    }
+
+    public function updateStatus($id, $status) {
+        $this->db->where('nomor_induk', $id);
+        $this->db->update('pengajuan_domain', array('status_pengajuan' => $status));
     }
 }
 ?>

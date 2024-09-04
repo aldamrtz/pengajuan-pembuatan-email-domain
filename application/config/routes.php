@@ -54,3 +54,4 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['captcha'] = 'CaptchaController/generateCaptcha';
 $route['check_email_availability'] = 'EmailController/check_email_availability';
+$route['AdminDomainController/updateStatusDomain'] = 'AdminDomainController/updateStatusDomain';
