@@ -94,7 +94,7 @@
                                 <li><a class="dropdown-item" href="<?= site_url('ProfileController/index'); ?>">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profil
                                 </a></li>
-                                <li><a class="dropdown-item" href="<?= site_url('LoginPengajuanController/logout'); ?>">
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
                                 </a></li>
                             </ul>
@@ -130,20 +130,18 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
+                    <h5 class="modal-title" id="logoutModalLabel">Konfirmasi Logout</h5>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">
+                    Apakah Anda yakin ingin logout?
+                </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-secondary" href="<?= site_url('LoginPengajuanController/logout'); ?>">Ya</a>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tidak</button>
                 </div>
             </div>
         </div>
@@ -193,30 +191,31 @@
                         notificationList.innerHTML = '';
                         notificationCount.textContent = data.length;
 
-                        data.forEach(notification => {
-                            const item = document.createElement('a');
-                            item.className = 'dropdown-item d-flex align-items-center';
-                            item.href = '#';
-                            item.innerHTML = `
-                                <div class="mr-3">
-                                    <div class="icon-circle ${notification.type === 'email' ? 'bg-primary' : 'bg-secondary'}">
-                                        <i class="${notification.type === 'email' ? 'fas fa-envelope text-white' : 'fas fa-globe text-white'}"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="small text-gray-500">${notification.date}</div>
-                                    <span>${notification.user} mengajukan pembuatan ${notification.type === 'email' ? 'akun Email' : 'Domain'}</span>
-                                </div>
-                                <button class="btn btn-link btn-sm" onclick="deleteNotification(${notification.id})">
-                                    <i class="fas fa-times text-danger"></i>
-                                </button>
-                            `;
-                            notificationList.appendChild(item);
-                        });
-
                         if (data.length === 0) {
+                            notificationList.innerHTML = '<a class="dropdown-item text-center small text-gray-500">No Notifications</a>';
                             document.getElementById('clear-all').style.display = 'none';
                         } else {
+                            data.forEach(notification => {
+                                const item = document.createElement('a');
+                                item.className = 'dropdown-item d-flex align-items-center';
+                                item.href = '#';
+                                item.innerHTML = `
+                                    <div class="mr-3">
+                                        <div class="icon-circle ${notification.type === 'email' ? 'bg-primary' : 'bg-secondary'}">
+                                            <i class="${notification.type === 'email' ? 'fas fa-envelope text-white' : 'fas fa-globe text-white'}"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">${notification.date}</div>
+                                        <span>${notification.user} mengajukan pembuatan ${notification.type === 'email' ? 'akun Email' : 'Domain'}</span>
+                                    </div>
+                                    <button class="btn btn-link btn-sm" onclick="deleteNotification(${notification.id})">
+                                        <i class="fas fa-times text-danger"></i>
+                                    </button>
+                                `;
+                                notificationList.appendChild(item);
+                            });
+
                             document.getElementById('clear-all').style.display = 'block';
                         }
                     });

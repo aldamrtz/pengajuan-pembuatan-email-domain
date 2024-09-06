@@ -20,21 +20,14 @@ class AdminPengajuanController extends CI_Controller {
     }
 
     public function index() {
-        // Ambil data dari session
         $data['admin_name'] = $this->session->userdata('admin_name');
         $data['profile_image'] = $this->session->userdata('profile_image');
-        // Ambil data dari model jika perlu
         $data['pengajuan_email'] = $this->EmailModel->getAllPengajuan();
-
-        // Muat tampilan dengan data
         $this->load->view('admin_pengajuan', $data);
     }
 
     public function data_pengajuan_email() {
-        // Ambil semua data dari tabel pengajuan_email
         $all_pengajuan_email = $this->EmailModel->getAllPengajuan();
-
-        // Kelompokkan data berdasarkan status
         $data['email_diajukan'] = array_filter($all_pengajuan_email, function($item) {
             return $item['status_pengajuan'] == 'Email Diajukan';
         });
@@ -52,10 +45,7 @@ class AdminPengajuanController extends CI_Controller {
     }
 
     public function data_pengajuan_domain() {
-        // Ambil semua data dari tabel pengajuan_domain
         $all_pengajuan_domain = $this->DomainModel->getAllPengajuan();
-
-        // Kelompokkan data berdasarkan status
         $data['domain_diajukan'] = array_filter($all_pengajuan_domain, function($item) {
             return $item['status_pengajuan'] == 'Domain Diajukan';
         });
@@ -76,10 +66,24 @@ class AdminPengajuanController extends CI_Controller {
         $id = $this->input->post('id');
         $status = $this->input->post('status_pengajuan');
 
-        // Update status di database
         $this->EmailModel->updateStatus($id, $status);
-
-        // Redirect kembali ke halaman utama
+        $pengajuan = $this->EmailModel->getPengajuanById($id);
+        $to = $pengajuan->email_pengguna;
+        
+        if ($status == 'Email Diproses') {
+            $subject = 'Status Pengajuan Email: Sedang Diproses';
+            $message = 'Pengajuan email Anda sedang diproses. Harap tunggu notifikasi lebih lanjut.';
+            $this->sendEmail($to, $subject, $message);
+        } elseif ($status == 'Email Diverifikasi') {
+            $subject = 'Status Pengajuan Email: Diverifikasi';
+            $message = 'Pengajuan email Anda telah diverifikasi.';
+            $this->sendEmail($to, $subject, $message);
+        } elseif ($status == 'Email Dikirim') {
+            $subject = 'Akun Email Anda Telah Dibuat';
+            $message = 'Email: ' . $pengajuan->email_diajukan . '<br>Password: ' . $pengajuan->password;
+            $this->sendEmail($to, $subject, $message);
+        }
+        
         redirect('AdminPengajuanController/data_pengajuan_email');
     }
 
@@ -87,11 +91,55 @@ class AdminPengajuanController extends CI_Controller {
         $id = $this->input->post('id');
         $status = $this->input->post('status_pengajuan');
 
-        // Update status di database
         $this->DomainModel->updateStatus($id, $status);
 
-        // Redirect kembali ke halaman utama
+        $pengajuan = $this->DomainModel->getPengajuanById($id);
+        $to = $pengajuan->email_penanggung_jawab;
+        
+        if ($status == 'Domain Diproses') {
+            $subject = 'Status Pengajuan Domain: Sedang Diproses';
+            $message = 'Pengajuan domain Anda sedang diproses. Harap tunggu notifikasi lebih lanjut.';
+            $this->sendEmail($to, $subject, $message);
+        } elseif ($status == 'Domain Diverifikasi') {
+            $subject = 'Status Pengajuan Domain: Diverifikasi';
+            $message = 'Pengajuan domain Anda telah diverifikasi.';
+            $this->sendEmail($to, $subject, $message);
+        } elseif ($status == 'Domain Dikirim') {
+            $subject = 'Domain Telah Dikirim';
+            $message = 'Sub Domain: ' . $pengajuan->sub_domain . '<br>IP Pointing: ' . $pengajuan->ip_pointing;
+            $this->sendEmail($to, $subject, $message);
+        }
+
         redirect('AdminPengajuanController/data_pengajuan_domain');
+    }
+
+    public function sendEmail($to, $subject, $message) {
+        $this->load->library('email');
+        
+        $config = array(
+            'protocol' => 'smtp',
+            'smtp_host' => 'ssl://smtp.googlemail.com',
+            'smtp_port' => 465,
+            'smtp_user' => 'aldaamorita@gmail.com', // Ganti dengan email kamu
+            'smtp_pass' => 'iftxvtcfydxwalsy',        // Ganti dengan password email kamu
+            'mailtype'  => 'html',
+            'charset'   => 'iso-8859-1',
+            'wordwrap'  => TRUE
+        );
+        
+        $this->email->initialize($config);
+        $this->email->set_newline("\r\n");
+        
+        $this->email->from('aldaamorita@gmail.com', 'Admin Unjani');
+        $this->email->to($to);
+        $this->email->subject($subject);
+        $this->email->message($message);
+        
+        if ($this->email->send()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function getNotifications() {

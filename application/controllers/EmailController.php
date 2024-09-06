@@ -21,14 +21,16 @@ class EmailController extends CI_Controller {
         $email_diajukan = $this->input->post('email_diajukan');
         $program_studi = $this->input->post('prodi');
 
-        // Tambahkan domain berdasarkan program studi
-        if ($this->input->post('email_option') == 'custom') {
+        if ($this->input->post('email_option') == 'suggestion') {
+            // Ambil nilai dari radio button jika opsi saran yang dipilih
+            $email_diajukan = $this->input->post('email_saran');
+        } else {
+            $email_diajukan = $this->input->post('email_diajukan');
+            // Tambahkan domain jika email custom yang dipilih
             $domain = $this->getDomainByProdi($program_studi);
             if (strpos($email_diajukan, $domain) === false) {
                 $email_diajukan .= $domain;
             }
-        } else {
-            $email_diajukan = '';
         }
         
         // Set input email yang sudah ditambahkan domain
@@ -93,6 +95,7 @@ class EmailController extends CI_Controller {
 
             if ($this->EmailModel->insert($data)) {
                 $this->session->set_flashdata('success', 'Pengajuan email berhasil dikirim.');
+                $this->sendNotificationEmail($data['email_pengguna'], $data);
             } else {
                 $this->session->set_flashdata('error', 'Pengajuan gagal. NIM sudah terdaftar.');
             }
@@ -105,6 +108,44 @@ class EmailController extends CI_Controller {
             $this->NotificationModel->insertNotification($notification_data);
 
             redirect('EmailController');
+        }
+    }
+
+    public function sendNotificationEmail($email_pengguna, $data) {
+        $this->load->library('email');
+        
+        $config = array(
+            'protocol' => 'smtp',
+            'smtp_host' => 'ssl://smtp.googlemail.com',
+            'smtp_port' => 465,
+            'smtp_user' => 'aldaamorita@gmail.com', // Ganti dengan email kamu
+            'smtp_pass' => 'iftxvtcfydxwalsy',        // Ganti dengan password email kamu
+            'mailtype'  => 'html',
+            'charset'   => 'iso-8859-1',
+            'wordwrap'  => TRUE
+        );
+        
+        $this->email->initialize($config);
+        $this->email->set_newline("\r\n");
+        
+        $this->email->from($email_pengguna, 'Pengajuan Email');
+        $this->email->to('aldaamorita@gmail.com'); // Ganti dengan email admin
+        $this->email->subject('Pengajuan Pembuatan Akun Email Baru');
+        
+        $message = '<p>Pengajuan pembuatan akun email baru oleh:</p>';
+        $message .= '<p>NIM: ' . $data['nim'] . '</p>';
+        $message .= '<p>Program Studi: ' . $data['prodi'] . '</p>';
+        $message .= '<p>Nama: ' . $data['nama_depan'] . ' ' . $data['nama_belakang'] . '</p>';
+        $message .= '<p>Email yang Diajukan: ' . $data['email_diajukan'] . '</p>';
+        $message .= '<p>Email Pengguna: ' . $data['email_pengguna'] . '</p>';
+        $message .= '<p>Kartu Tanda Mahasiswa (KTM): <a href="' . base_url('uploads/ktm/' . $data['ktm']) . '">' . $data['ktm'] . '</a></p>';
+
+        $this->email->message($message);
+        
+        if ($this->email->send()) {
+            return true;
+        } else {
+            return false;
         }
     }
 

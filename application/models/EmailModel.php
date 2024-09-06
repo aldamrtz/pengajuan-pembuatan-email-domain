@@ -46,5 +46,10 @@ class EmailModel extends CI_Model {
         $this->db->where('nim', $id);
         $this->db->update('pengajuan_email', array('status_pengajuan' => $status));
     }
+
+    public function getPengajuanById($id) {
+        $query = $this->db->get_where('pengajuan_email', array('nim' => $id));
+        return $query->row(); // or ->result(), depending on your needs
+    }
 }
 ?>

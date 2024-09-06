@@ -225,7 +225,7 @@
                                 <li><a class="dropdown-item" href="<?= site_url('ProfileController/index'); ?>">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profil
                                 </a></li>
-                                <li><a class="dropdown-item" href="<?= site_url('LoginPengajuanController/logout'); ?>">
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
                                 </a></li>
                             </ul>
@@ -281,18 +281,17 @@
                                         <td><?= $email['email_diajukan']; ?></td>
                                         <td><?= $email['email_pengguna']; ?></td>
                                         <td>
-                                            <a href="#" class="ktm-icon" data-img="<?= base_url('uploads/' . $email['ktm']); ?>" data-link="<?= base_url('uploads/' . $email['ktm']); ?>">
+                                            <a href="#" class="ktm-icon" data-img="<?= base_url('uploads/ktm/' . $email['ktm']); ?>" data-link="<?= base_url('uploads/' . $email['ktm']); ?>">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                         </td>
                                         <td><?= $email['tgl_pengajuan']; ?></td>
                                         <td>
                                             <form method="post" action="<?= site_url('AdminPengajuanController/updateStatusEmail'); ?>">
-    <input type="hidden" name="id" value="<?= $email['nim']; ?>">
-    <input type="hidden" name="status_pengajuan" value="Email Diproses">
-    <button type="submit" class="btn btn-primary custom-process-btn">Proses Email</button>
-</form>
-
+                                                <input type="hidden" name="id" value="<?= $email['nim']; ?>">
+                                                <input type="hidden" name="status_pengajuan" value="Email Diproses">
+                                                <button type="submit" class="btn btn-primary custom-process-btn">Proses Email</button>
+                                            </form>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>
@@ -455,20 +454,19 @@
         </div>
     </div>
 
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
+                    <h5 class="modal-title" id="logoutModalLabel">Konfirmasi Logout</h5>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">
+                    Apakah Anda yakin ingin logout?
+                </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-secondary" href="<?= site_url('LoginPengajuanController/logout'); ?>">Ya</a>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tidak</button>
                 </div>
             </div>
         </div>

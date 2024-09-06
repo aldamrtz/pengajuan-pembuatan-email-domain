@@ -7,13 +7,9 @@
     <meta name="description" content>
     <meta name="author" content>
     <title>Admin Pengajuan Domain</title>
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome from CDN -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" type="text/css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-    <!-- SB Admin 2 CSS from CDN -->
     <link href="https://cdn.jsdelivr.net/npm/startbootstrap-sb-admin-2@4.0.5/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="<?= base_url('assets/img/Unjani.png'); ?>" rel="icon" type="image/png">
     <style>
@@ -239,7 +235,7 @@
                                 <li><a class="dropdown-item" href="<?= site_url('ProfileController/index'); ?>">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profil
                                 </a></li>
-                                <li><a class="dropdown-item" href="<?= site_url('LoginPengajuanController/logout'); ?>">
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
                                 </a></li>
                             </ul>
@@ -299,7 +295,7 @@
                                         <td><?= $domain['tgl_pengajuan']; ?></td>
                                         <td>
                                             <form method="post" action="<?= site_url('AdminPengajuanController/updateStatusDomain'); ?>">
-                                                <input type="hidden" name="id" value="<?= $domain['nomor_induk']; ?>">
+                                                <input type="hidden" name="id" value="<?= $domain['id_pengajuan_domain']; ?>">
                                                 <input type="hidden" name="status_pengajuan" value="Domain Diproses">
                                                 <button type="submit" class="btn btn-primary custom-process-btn">Proses Domain</button>
                                             </form>
@@ -342,7 +338,7 @@
                                         <td><?= $domain['tgl_pengajuan']; ?></td>
                                         <td>
                                             <form method="post" action="<?= site_url('AdminPengajuanController/updateStatusDomain'); ?>">
-                                                <input type="hidden" name="id" value="<?= $domain['nomor_induk']; ?>">
+                                                <input type="hidden" name="id" value="<?= $domain['id_pengajuan_domain']; ?>">
                                                 <input type="hidden" name="status_pengajuan" value="Domain Diverifikasi">
                                                 <button type="submit" class="btn btn-warning custom-verify-btn">Verifikasi Domain</button>
                                             </form>
@@ -385,7 +381,7 @@
                                         <td><?= $domain['tgl_pengajuan']; ?></td>
                                         <td>
                                             <form method="post" action="<?= site_url('AdminPengajuanController/updateStatusDomain'); ?>">
-                                                <input type="hidden" name="id" value="<?= $domain['nomor_induk']; ?>">
+                                                <input type="hidden" name="id" value="<?= $domain['id_pengajuan_domain']; ?>">
                                                 <input type="hidden" name="status_pengajuan" value="Domain Dikirim">
                                                 <button type="submit" class="btn btn-success custom-send-btn">Kirim Domain</button>
                                             </form>
@@ -446,59 +442,33 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <div class="modal fade" id="ktmModal" tabindex="-1" aria-labelledby="ktmModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ktmModalLabel">View KTM</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="fas fa-times"></i>
-                    </button>
+                    <h5 class="modal-title" id="logoutModalLabel">Konfirmasi Logout</h5>
                 </div>
-                <div class="modal-body text-center">
-                    <img id="ktmImage" src="" class="img-fluid" alt="KTM">
+                <div class="modal-body">
+                    Apakah Anda yakin ingin logout?
                 </div>
                 <div class="modal-footer">
-                    <a id="ktmDownloadLink" href="" class="btn btn-primary" download>Download</a>
+                    <a class="btn btn-secondary" href="<?= site_url('LoginPengajuanController/logout'); ?>">Ya</a>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tidak</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bootstrap core JavaScript-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core plugin JavaScript-->
     <script src="https://cdn.jsdelivr.net/npm/jquery-easing@1.4.1/jquery.easing.min.js"></script>
-    <!-- SB Admin 2 JavaScript-->
     <script src="https://cdn.jsdelivr.net/npm/startbootstrap-sb-admin-2@4.0.5/js/sb-admin-2.min.js"></script>
     <script>
-        
-        // Fungsi untuk menyimpan tab yang aktif ke localStorage
         function saveActiveTab(tabId) {
             localStorage.setItem('activeTab', tabId);
         }
 
-        // Fungsi untuk mengaktifkan tab dari localStorage
         function activateSavedTab() {
             const activeTabId = localStorage.getItem('activeTab');
             if (activeTabId) {
@@ -510,13 +480,11 @@
             }
         }
 
-        // Event listener untuk menyimpan tab yang aktif
         document.addEventListener('shown.bs.tab', function (event) {
             const tabId = event.target.getAttribute('data-bs-target');
             saveActiveTab(tabId);
         });
 
-        // Aktifkan tab yang tersimpan ketika halaman dimuat
         document.addEventListener('DOMContentLoaded', function () {
             activateSavedTab();
             function loadNotifications() {
@@ -572,21 +540,6 @@
             document.getElementById('clear-all').addEventListener('click', clearAllNotifications);
 
             loadNotifications();
-
-            const ktmIcons = document.querySelectorAll('.ktm-icon');
-
-            ktmIcons.forEach(icon => {
-                icon.addEventListener('click', function() {
-                    const imgSrc = this.getAttribute('data-img');
-                    const imgLink = this.getAttribute('data-link');
-
-                    document.getElementById('ktmImage').src = imgSrc;
-                    document.getElementById('ktmDownloadLink').href = imgLink;
-
-                    const ktmModal = new bootstrap.Modal(document.getElementById('ktmModal'));
-                    ktmModal.show();
-                });
-            });
         });
 </script>
 

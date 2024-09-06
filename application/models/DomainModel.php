@@ -8,7 +8,7 @@ class DomainModel extends CI_Model {
     }
     
     public function insert($data) {
-        if ($this->db->get_where('pengajuan_domain', ['nomor_induk' => $data['nomor_induk']])->num_rows() > 0) {
+        if ($this->db->get_where('pengajuan_domain', ['id_pengajuan_domain' => $data['id_pengajuan_domain']])->num_rows() > 0) {
             return FALSE;
         } else {
             if (!isset($data['tgl_pengajuan'])) {
@@ -43,8 +43,14 @@ class DomainModel extends CI_Model {
     }
 
     public function updateStatus($id, $status) {
-        $this->db->where('nomor_induk', $id);
+        $this->db->where('id_pengajuan_domain', $id);
         $this->db->update('pengajuan_domain', array('status_pengajuan' => $status));
+    }
+
+    public function getPengajuanById($id) {
+        $this->db->where('id_pengajuan_domain', $id);
+        $query = $this->db->get('pengajuan_domain');
+        return $query->row(); // Return a single row object
     }
 }
 ?>
