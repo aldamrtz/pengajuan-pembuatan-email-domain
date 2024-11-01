@@ -49,6 +49,91 @@ class EmailModel extends CI_Model
         return $this->db->insert('email_terdaftar', $data);
     }
 
+    public function getAllPengajuan()
+    {
+        $this->db->order_by('tgl_pengajuan', 'DESC');
+        $query = $this->db->get('pengajuan_email');
+        return $query->result_array();
+    }
+
+    public function getPengajuanByStatus($status)
+    {
+        $this->db->where('status_pengajuan', $status);
+        $this->db->order_by('tgl_pengajuan', 'DESC');
+        return $this->db->get('pengajuan_email')->result_array();
+    }
+
+    public function updateStatus($id, $status)
+    {
+        $this->db->where('nim', $id);
+        $this->db->update('pengajuan_email', array('status_pengajuan' => $status));
+        $this->db->insert('status_history_email', array('nim' => $id, 'status' => $status));
+    }
+
+    public function getStatusHistory($nim)
+    {
+        $this->db->where('nim', $nim);
+        $this->db->order_by('tgl_update', 'DESC'); // pastikan ada kolom tgl_update di tabel
+        return $this->db->get('status_history_email')->result_array();
+    }
+
+    public function insertStatusHistoryEmail($data)
+    {
+        return $this->db->insert('status_history_email', $data);
+    }
+
+    public function getPengajuanById($id)
+    {
+        $query = $this->db->get_where('pengajuan_email', array('nim' => $id));
+        return $query->row();
+    }
+
+    public function checkEmailAndCode($email_pengguna, $kode_pengajuan)
+    {
+        $this->db->where('email_pengguna', $email_pengguna);
+        $query = $this->db->get('pengajuan_email');
+
+        if ($query->num_rows() == 0) {
+            return 'email_not_found';
+        }
+
+        $this->db->where('kode_pengajuan', $kode_pengajuan);
+        $query = $this->db->get('pengajuan_email');
+
+        if ($query->num_rows() == 0) {
+            return 'kode_salah';
+        }
+
+        return 'success';
+    }
+
+    public function getPengajuanByEmailAndCode($email_pengguna, $kode_pengajuan)
+    {
+        $this->db->where('email_pengguna', $email_pengguna);
+        $this->db->where('kode_pengajuan', $kode_pengajuan);
+        $query = $this->db->get('pengajuan_email');
+        return $query->row();
+    }
+
+    public function updatePengajuan($nim, $prodi, $nama_lengkap, $email_diajukan, $email_pengguna)
+    {
+        $this->db->where('nim', $nim);
+        $this->db->update('pengajuan_email', [
+            'prodi' => $prodi,
+            'nama_lengkap' => $nama_lengkap,
+            'email_diajukan' => $email_diajukan,
+            'email_pengguna' => $email_pengguna
+        ]);
+    }
+
+    public function deletePengajuan($nim)
+    {
+        $this->db->where('nim', $nim);
+        $this->db->delete('status_history_email');
+
+        $this->db->where('nim', $nim);
+        return $this->db->delete('pengajuan_email');
+    }
 
     public function getProgramStudi()
     {
@@ -96,31 +181,5 @@ class EmailModel extends CI_Model
             'Profesi Bidan' => 'Profesi Bidan',
             'Kebidanan D-3' => 'Kebidanan D-3'
         ];
-    }
-
-    public function getAllPengajuan()
-    {
-        $this->db->order_by('tgl_pengajuan', 'DESC'); // Order by the latest date
-        $query = $this->db->get('pengajuan_email');
-        return $query->result_array();
-    }
-
-    public function getPengajuanByStatus($status)
-    {
-        $this->db->where('status_pengajuan', $status);
-        $this->db->order_by('tgl_pengajuan', 'DESC'); // Order by the latest date
-        return $this->db->get('pengajuan_email')->result_array();
-    }
-
-    public function updateStatus($id, $status)
-    {
-        $this->db->where('nim', $id);
-        $this->db->update('pengajuan_email', array('status_pengajuan' => $status));
-    }
-
-    public function getPengajuanById($id)
-    {
-        $query = $this->db->get_where('pengajuan_email', array('nim' => $id));
-        return $query->row(); // or ->result(), depending on your needs
     }
 }

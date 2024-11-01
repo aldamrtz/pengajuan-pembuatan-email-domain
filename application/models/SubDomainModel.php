@@ -29,7 +29,7 @@ class SubDomainModel extends CI_Model
         $this->db->where('sub_domain', 'https://' . $sub_domain . '.unjani.ac.id');
         $query = $this->db->get('pengajuan_subdomain');
 
-        return $query->num_rows() > 0; // Returns true if exists
+        return $query->num_rows() > 0;
     }
 
 
@@ -43,6 +43,98 @@ class SubDomainModel extends CI_Model
     public function insertToRegistered($data)
     {
         return $this->db->insert('subdomain_terdaftar', $data);
+    }
+
+    public function getAllPengajuan()
+    {
+        $this->db->order_by('tgl_pengajuan', 'DESC');
+        $query = $this->db->get('pengajuan_subdomain');
+        return $query->result_array();
+    }
+
+    public function getPengajuanByStatus($status)
+    {
+        $this->db->where('status_pengajuan', $status);
+        $this->db->order_by('tgl_pengajuan', 'DESC');
+        return $this->db->get('pengajuan_subdomain')->result_array();
+    }
+
+    public function updateStatus($id, $status)
+    {
+        $this->db->where('id_pengajuan_subdomain', $id);
+        $this->db->update('pengajuan_subdomain', array('status_pengajuan' => $status));
+        $this->db->insert('status_history_subdomain', array('id_pengajuan_subdomain' => $id, 'status' => $status));
+    }
+
+    public function getStatusHistory($id_pengajuan_subdomain)
+    {
+        $this->db->where('id_pengajuan_subdomain', $id_pengajuan_subdomain);
+        $this->db->order_by('tgl_update', 'DESC'); // pastikan ada kolom tgl_update di tabel
+        return $this->db->get('status_history_subdomain')->result_array();
+    }
+
+    public function insertStatusHistorySubdomain($data)
+    {
+        return $this->db->insert('status_history_subdomain', $data);
+    }
+
+    public function getPengajuanById($id)
+    {
+        $this->db->where('id_pengajuan_subdomain', $id);
+        $query = $this->db->get('pengajuan_subdomain');
+        return $query->row();
+    }
+
+    public function checkEmailAndCode($email_penanggung_jawab, $kode_pengajuan)
+    {
+        $this->db->where('email_penanggung_jawab', $email_penanggung_jawab);
+        $query = $this->db->get('pengajuan_subdomain');
+
+        if ($query->num_rows() == 0) {
+            return 'email_not_found';
+        }
+
+        $this->db->where('kode_pengajuan', $kode_pengajuan);
+        $query = $this->db->get('pengajuan_subdomain');
+
+        if ($query->num_rows() == 0) {
+            return 'kode_salah';
+        }
+
+        return 'success';
+    }
+
+    public function getPengajuanByEmailAndCode($email_penanggung_jawab, $kode_pengajuan)
+    {
+        $this->db->where('email_penanggung_jawab', $email_penanggung_jawab);
+        $this->db->where('kode_pengajuan', $kode_pengajuan);
+        $query = $this->db->get('pengajuan_subdomain');
+        return $query->row();
+    }
+
+    public function updatePengajuan($id_pengajuan_subdomain, $nomor_induk, $unit_kerja, $penanggung_jawab, $email_penanggung_jawab, $kontak_penanggung_jawab, $sub_domain, $ip_pointing, $keterangan)
+    {
+        $this->db->where('id_pengajuan_subdomain', $$id_pengajuan_subdomain);
+        $this->db->update('pengajuan_subdomain', [
+            'id_pengajuan_subdomain' => $id_pengajuan_subdomain,
+            'nomor_induk' => $nomor_induk,
+            'unit_kerja' => $unit_kerja,
+            'penanggung_jawab' => $penanggung_jawab,
+            'email_penanggung_jawab' => $email_penanggung_jawab,
+            'kontak_penanggung_jawab' => $kontak_penanggung_jawab,
+            'sub_domain' => $sub_domain,
+            'ip_pointing' => $ip_pointing,
+            'keterangan' => $keterangan
+        ]);
+    }
+
+    public function deletePengajuan($id_pengajuan_subdomain)
+    {
+        $this->db->where('id_pengajuan_subdomain', $id_pengajuan_subdomain);
+        $this->db->delete('status_history_subdomain');
+
+        $this->db->where('id_pengajuan_subdomain', $id_pengajuan_subdomain);
+        return $this->db->delete('pengajuan_subdomain');
     }
 
     public function getUnitKerja()
@@ -91,32 +183,5 @@ class SubDomainModel extends CI_Model
             'Profesi Bidan' => 'Profesi Bidan',
             'Kebidanan D-3' => 'Kebidanan D-3'
         ];
-    }
-
-    public function getAllPengajuan()
-    {
-        $this->db->order_by('tgl_pengajuan', 'DESC'); // Order by the latest date
-        $query = $this->db->get('pengajuan_subdomain');
-        return $query->result_array();
-    }
-
-    public function getPengajuanByStatus($status)
-    {
-        $this->db->where('status_pengajuan', $status);
-        $this->db->order_by('tgl_pengajuan', 'DESC'); // Order by the latest date
-        return $this->db->get('pengajuan_subdomain')->result_array();
-    }
-
-    public function updateStatus($id, $status)
-    {
-        $this->db->where('id_pengajuan_subdomain', $id);
-        $this->db->update('pengajuan_subdomain', array('status_pengajuan' => $status));
-    }
-
-    public function getPengajuanById($id)
-    {
-        $this->db->where('id_pengajuan_subdomain', $id);
-        $query = $this->db->get('pengajuan_subdomain');
-        return $query->row(); // Return a single row object
     }
 }

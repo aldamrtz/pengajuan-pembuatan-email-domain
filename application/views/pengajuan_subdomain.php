@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #00aaff;
+            font-family: 'Roboto', sans-serif;
+            background-color: #e0f5ec;
             background-size: cover;
             background-attachment: fixed;
             display: flex;
@@ -25,6 +25,87 @@
             height: 100vh;
             margin: 0;
             overflow: auto;
+        }
+
+        .navbar {
+            background-color: white;
+            height: 70px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1050;
+        }
+
+        .navbar-toggler {
+            display: none;
+        }
+
+        .sidebar {
+            background: linear-gradient(135deg, #13855c, #13855c, #1cc88a);
+            height: 100vh;
+            padding: 15px;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1100;
+            width: 267px;
+            transition: transform 0.3s ease;
+            display: none;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .sidebar-brand-icon img {
+            display: inline-block;
+            width: 40px;
+            height: auto;
+            text-shadow: #ffffff
+        }
+
+        .sidebar-brand-text {
+            margin-left: 10px;
+            margin-right: 3px;
+            color: #ffffff;
+            text-decoration: none !important;
+            font-size: 18px;
+        }
+
+        .sidebar-divider {
+            height: 0px;
+            background-color: #ffffff !important;
+        }
+
+        .sidebar-heading {
+            margin-top: 3px;
+            margin-bottom: 3px;
+            opacity: 0.5;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .nav-item .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            opacity: 0.7;
+            font-size: 14px;
+            margin-left: -10px;
+        }
+
+        .nav-item .nav-link i {
+            margin-right: 7px;
+        }
+
+        .nav-item .nav-link:hover {
+            opacity: 1;
+        }
+
+        .nav-item.active .nav-link {
+            opacity: 1;
+            font-weight: bold;
         }
 
         .container-fluid {
@@ -45,12 +126,12 @@
 
         .form-wrapper {
             position: static;
-            max-width: 100%;
-            width: 100%;
+            width: 962px;
             background: #ffffff;
             padding: 30px;
-            margin-top: 50px;
-            margin-bottom: 50px;
+            margin-top: 80px;
+            margin-bottom: 7px;
+            margin-left: 63px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
@@ -89,7 +170,6 @@
         }
 
         .form-group input,
-        .form-group select,
         .form-group textarea {
             color: #333;
             border-color: #003366;
@@ -101,8 +181,7 @@
         }
 
         .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea {
+        .form-group textarea:focus {
             box-shadow: 0 0 0 0.25rem rgba(0, 170, 255, 0.25);
             border-color: #00aaff;
         }
@@ -343,9 +422,27 @@
         }
 
         @media (max-width: 768px) {
-            .container {
-                width: 90%;
-                padding: 30px;
+            .form-wrapper {
+                width: 100%;
+                max-width: 100%;
+                margin-left: 0;
+            }
+
+            .navbar-toggler {
+                display: inline-block;
+                position: absolute;
+                top: 15px;
+                left: 20px;
+                z-index: 1000;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                display: block;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
             }
 
             .form-group {
@@ -360,9 +457,27 @@
         }
 
         @media (max-width: 576px) {
-            .container {
-                width: 90%;
-                padding: 30px;
+            .form-wrapper {
+                width: 100%;
+                max-width: 100%;
+                margin-left: 0;
+            }
+
+            .navbar-toggler {
+                display: inline-block;
+                position: absolute;
+                top: 15px;
+                left: 20px;
+                z-index: 1000;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                display: block;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
             }
 
             .form-group {
@@ -379,6 +494,48 @@
 
 <body>
     <div class="container-fluid">
+        <nav class="navbar fixed-top">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" aria-label="Toggle sidebar">
+                    <span class="navbar-toggler-icon"></span> <!-- Icon burger -->
+                </button>
+            </div>
+        </nav>
+
+        <!-- Sidebar -->
+        <div class="sidebar d-md-block" id="sidebar">
+            <a class="sidebar-brand" href="<?= site_url('SubDomainController'); ?>" style="text-decoration: none;">
+                <div class="sidebar-brand-icon">
+                    <img src="<?= base_url('assets/img/logo-unjani.png') ?>">
+                </div>
+                <div class="sidebar-brand-text">ACCESS TRACK</div>
+            </a>
+            <ul class="nav flex-column">
+                <hr class="sidebar-divider">
+                <div class="sidebar-heading">PENGAJUAN</div>
+                <li class="nav-item active" style="margin-bottom: 5px !important;">
+                    <a class="nav-link" href="<?= site_url('SubDomainController'); ?>" style="text-decoration: none;">
+                        <i class="fas fa-globe"></i>
+                        <span>Pengajuan Sub Domain</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= site_url('SubDomainController/status_pengajuan_subdomain'); ?>" style="text-decoration: none;">
+                        <i class="fas fa-tasks"></i>
+                        <span>Status Pengajuan Sub Domain</span>
+                    </a>
+                </li>
+                <hr class="sidebar-divider">
+                <div class="sidebar-heading">LAPORAN</div>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= site_url('SubDomainController/kendala_pengajuan_subdomain'); ?>">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Kendala Pengajuan</span>
+                    </a>
+                </li>
+                <hr class="sidebar-divider">
+            </ul>
+        </div>
         <div class="row form-container justify-content-center">
             <div class="col-md-8">
                 <div class="form-wrapper">
@@ -387,7 +544,7 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input type="number" min="7" class="form-control" id="nomor_induk" name="nomor_induk" placeholder=" " value="<?= set_value('nomor_induk'); ?>" required pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <input type="text" class="form-control" id="nomor_induk" name="nomor_induk" placeholder=" " value="<?= set_value('nomor_induk'); ?>" required pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                 <label for="nomor_induk" class="form-label">Nomor Induk</label>
                             </div>
                         </div>
@@ -418,7 +575,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input type="number" min="7" class="form-control" id="kontak_penanggung_jawab" name="kontak_penanggung_jawab" placeholder=" " value="<?= set_value('kontak_penanggung_jawab'); ?>" required pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <input type="text" class="form-control" id="kontak_penanggung_jawab" name="kontak_penanggung_jawab" placeholder=" " value="<?= set_value('kontak_penanggung_jawab'); ?>" required pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                 <label for="kontak_penanggung_jawab" class="form-label">Kontak Penanggung Jawab</label>
                             </div>
                         </div>
@@ -535,13 +692,28 @@
                 }
             });
 
+            // Validasi Email Input
             emailInput.addEventListener('input', function() {
-                const emailPattern = /^[a-z0-9.@]+$/;
-                if (emailInput.value === '') {
-                    // Kosongkan feedback jika input kosong
+                const emailValue = emailInput.value;
+
+                const lengthPattern = /^.{6,30}$/;
+                const contentPattern = /^[a-z0-9.@]+$/;
+                const consecutiveDotPattern = /\.\./;
+                const startEndDotPattern = /^\.|\.$/;
+
+                if (emailValue === '') {
                     emailFeedback.textContent = '';
-                } else if (!emailPattern.test(emailInput.value)) {
-                    emailFeedback.textContent = 'Email hanya boleh berisi huruf (a-z), angka(0-9), dan (.)';
+                } else if (!contentPattern.test(emailValue)) {
+                    emailFeedback.textContent = 'Hanya huruf (a-z), angka (0-9), dan tanda titik (.) yang diizinkan.';
+                    emailFeedback.className = 'feedback error';
+                } else if (startEndDotPattern.test(emailValue)) {
+                    emailFeedback.textContent = 'Tanda titik (.) tidak boleh di awal atau di akhir email.';
+                    emailFeedback.className = 'feedback error';
+                } else if (!lengthPattern.test(emailValue)) {
+                    emailFeedback.textContent = 'Email harus terdiri dari 6-30 karakter.';
+                    emailFeedback.className = 'feedback error';
+                } else if (consecutiveDotPattern.test(emailValue)) {
+                    emailFeedback.textContent = 'Tanda titik (.) tidak boleh berurutan.';
                     emailFeedback.className = 'feedback error';
                 } else {
                     emailFeedback.textContent = '';

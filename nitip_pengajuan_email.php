@@ -16,7 +16,7 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #e0f5ec;
+            background-color: #00aaff;
             background-size: cover;
             background-attachment: fixed;
             display: flex;
@@ -39,8 +39,49 @@
             display: none;
         }
 
+        @media (min-width: 768px) {
+            .navbar-toggler {
+                display: none;
+            }
+
+            .sidebar {
+                display: block;
+                width: 250px;
+            }
+
+            .content {
+                margin-left: 250px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .navbar-toggler {
+                display: block;
+            }
+
+            .sidebar {
+                display: none;
+                position: fixed;
+                width: 250px;
+                height: 100%;
+                z-index: 1000;
+                top: 0;
+                left: 0;
+                transition: transform 0.3s ease;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+            }
+        }
+
         .sidebar {
-            background: linear-gradient(135deg, #13855c, #13855c, #1cc88a);
+            background: linear-gradient(135deg, #13855c, #1cc88a);
             height: 100vh;
             padding: 15px;
             color: white;
@@ -48,7 +89,7 @@
             top: 0;
             left: 0;
             z-index: 1100;
-            width: 230px;
+            width: 225px;
             transition: transform 0.3s ease;
             display: none;
         }
@@ -92,7 +133,6 @@
             text-decoration: none;
             opacity: 0.7;
             font-size: 14px;
-            margin-left: -10px;
         }
 
         .nav-item .nav-link i {
@@ -106,6 +146,11 @@
         .nav-item.active .nav-link {
             opacity: 1;
             font-weight: bold;
+        }
+
+        .content {
+            padding: 20px;
+            flex-grow: 1;
         }
 
         .container-fluid {
@@ -126,14 +171,14 @@
 
         .form-wrapper {
             position: static;
-            width: 1000px;
+            max-width: 100%;
+            width: 100%;
             background: #ffffff;
             padding: 30px;
-            margin-top: 80px;
-            margin-bottom: 10px;
-            margin-left: 25px;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin-top: 100px;
+            margin-bottom: 50px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .form-container {
@@ -162,7 +207,7 @@
             color: #333;
             border-color: #003366;
             padding: 10px 15px 10px 15px;
-            border-radius: 5px;
+            border-radius: 7px;
             width: 100%;
             box-sizing: border-box;
             z-index: 0;
@@ -294,7 +339,7 @@
         input[type="file"]::-webkit-file-upload-button {
             background-color: rgba(0, 51, 102, 0.25);
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 7px;
             padding: 1px 10px;
             margin-left: -7px;
             border: none;
@@ -472,27 +517,9 @@
         }
 
         @media (max-width: 768px) {
-            .form-wrapper {
-                width: 100%;
-                max-width: 100%;
-                margin-left: 0;
-            }
-
-            .navbar-toggler {
-                display: inline-block;
-                position: absolute;
-                top: 15px;
-                left: 20px;
-                z-index: 1000;
-            }
-
-            .sidebar {
-                transform: translateX(-100%);
-                display: block;
-            }
-
-            .sidebar.show {
-                transform: translateX(0);
+            .container {
+                width: 90%;
+                padding: 30px;
             }
 
             .form-group {
@@ -503,30 +530,13 @@
             .row.mb-3 {
                 margin-bottom: 1px !important;
             }
+
         }
 
         @media (max-width: 576px) {
-            .form-wrapper {
-                width: 100%;
-                max-width: 100%;
-                margin-left: 0;
-            }
-
-            .navbar-toggler {
-                display: inline-block;
-                position: absolute;
-                top: 15px;
-                left: 20px;
-                z-index: 1000;
-            }
-
-            .sidebar {
-                transform: translateX(-100%);
-                display: block;
-            }
-
-            .sidebar.show {
-                transform: translateX(0);
+            .container {
+                width: 90%;
+                padding: 30px;
             }
 
             .form-group {
@@ -542,121 +552,136 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-        <nav class="navbar fixed-top">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button" aria-label="Toggle sidebar">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-        </nav>
-        <div class="sidebar d-md-block" id="sidebar">
-            <a class="sidebar-brand" href="<?= site_url('EmailController'); ?>" style="text-decoration: none;">
-                <div class="sidebar-brand-icon">
-                    <img src="<?= base_url('assets/img/logo-unjani.png') ?>">
-                </div>
-                <div class="sidebar-brand-text">ACCESS TRACK</div>
-            </a>
-            <ul class="nav flex-column">
-                <hr class="sidebar-divider">
-                <div class="sidebar-heading">PENGAJUAN</div>
-                <li class="nav-item active" style="margin-bottom: 5px !important;">
-                    <a class="nav-link" href="<?= site_url('EmailController'); ?>" style="text-decoration: none;">
-                        <i class="fas fa-envelope"></i>
-                        <span>Pengajuan Email</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= site_url('EmailController/status_pengajuan_email'); ?>" style="text-decoration: none;">
-                        <i class="fas fa-tasks"></i>
-                        <span>Status Pengajuan Email</span>
-                    </a>
-                </li>
-                <hr class="sidebar-divider">
-                <div class="sidebar-heading">LAPORAN</div>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= site_url('EmailController/kendala_pengajuan_email'); ?>">
-                        <i class="fas fa-file-alt"></i>
-                        <span>Kendala Pengajuan</span>
-                    </a>
-                </li>
-                <hr class="sidebar-divider">
-            </ul>
+    <nav class="navbar fixed-top">
+        <div class="container-fluid">
+            <!-- Tombol toggle untuk layar kecil -->
+            <button class="navbar-toggler" type="button" aria-label="Toggle sidebar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
         </div>
-        <div class="row form-container justify-content-center">
-            <div class="col-md-8">
-                <div class="form-wrapper">
-                    <h2>Pengajuan Pembuatan Akun Email</h2>
-                    <?= form_open_multipart('EmailController/submit'); ?>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="nim" name="nim" placeholder=" " value="<?= set_value('nim'); ?>" required pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                                <label for="nim" class="form-label">Nomor Induk Mahasiswa (NIM)</label>
-                                <div id="nimValidationFeedback" class="feedback feedback-spacing"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <select class="form-select" id="prodi" name="prodi" placeholder=" " required>
-                                    <option value=""></option>
-                                    <?php foreach ($program_studi as $value => $label): ?>
-                                        <option value="<?= $value; ?>" <?= set_select('prodi', $value); ?>><?= $label; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <label for="prodi" class="form-label">Program Studi</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" placeholder=" " value="<?= set_value('nama_lengkap'); ?>" required>
-                                <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
-                                <div id="namaLengkapFeedback" class="feedback"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-3 suggestion-radio">
-                        <div id="emailSuggestions">
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" id="customEmail" name="email_option" value="custom" <?= set_radio('email_option', 'custom'); ?>>
-                            <label class="form-check-label" for="customEmail" style="margin-bottom: 13px !important;">Buat username Anda sendiri</label>
-                        </div>
-                    </div>
-                    <div id="customEmailField" class="mb-3 email-options">
-                        <div class=" col-md-12">
-                            <div class="form-group email-group">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="email_diajukan" style="z-index: 0;" name="email_diajukan" placeholder=" " value="<?= set_value('email_diajukan'); ?>" required>
-                                    <label for="email_diajukan" class="form-label">Username</label>
-                                    <span class="input-group-text" id="emailDomain">@if.unjani.ac.id</span>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar d-md-block" id="sidebar">
+        <a class="sidebar-brand" href="<?= site_url('EmailController'); ?>" style="text-decoration: none;">
+            <div class="sidebar-brand-icon">
+                <img src="<?= base_url('assets/img/logo-unjani.png') ?>">
+            </div>
+            <div class="sidebar-brand-text">ACCESS TRACK</div>
+        </a>
+        <ul class="nav flex-column">
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">PENGAJUAN</div>
+            <li class="nav-item active" style="margin-bottom: 5px !important;">
+                <a class="nav-link" href="<?= site_url('EmailController/pengajuan_email'); ?>" style="text-decoration: none;">
+                    <i class="fas fa-envelope"></i>
+                    <span>Pengajuan Email</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= site_url('EmailController'); ?>" style="text-decoration: none;">
+                    <i class="fas fa-globe"></i>
+                    <span>Status Pengajuan</span>
+                </a>
+            </li>
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">LAPORAN</div>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= site_url('EmailController'); ?>">
+                    <i class="fas fa-home"></i>
+                    <span>Pesan</span>
+                </a>
+            </li>
+            <hr class="sidebar-divider">
+        </ul>
+    </div>
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row form-container justify-content-center">
+                <div class="col-md-8">
+                    <div class="form-wrapper">
+                        <h2>Pengajuan Pembuatan Email</h2>
+                        <?= form_open_multipart('EmailController/submit'); ?>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="number" min="7" class="form-control" id="nim" name="nim" placeholder=" " value="<?= set_value('nim'); ?>" required pattern="\d*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <label for="nim" class="form-label">Nomor Induk Mahasiswa (NIM)</label>
+                                    <div id="nimValidationFeedback" class="feedback feedback-spacing"></div>
                                 </div>
-                                <div id="emailValidationFeedback" class="feedback"></div>
-                                <div id="emailAvailabilityFeedback" class="feedback"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <select class="form-select" id="prodi" name="prodi" placeholder=" " required>
+                                        <option value=""></option> <!-- Empty option -->
+                                        <?php foreach ($program_studi as $value => $label): ?>
+                                            <option value="<?= $value; ?>" <?= set_select('prodi', $value); ?>><?= $label; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <label for="prodi" class="form-label">Program Studi</label>
+                                </div>
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="nama_depan" name="nama_depan" placeholder=" " value="<?= set_value('nama_depan'); ?>" required>
+                                    <label for="nama_depan" class="form-label">Nama Depan</label>
+                                    <div id="namaDepanFeedback" class="feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="nama_belakang" name="nama_belakang" placeholder=" " value="<?= set_value('nama_belakang'); ?>" required>
+                                    <label for="nama_belakang" class="form-label">Nama Belakang</label>
+                                    <div id="namaBelakangFeedback" class="feedback"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 suggestion-radio">
+                            <div id="emailSuggestions">
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="customEmail" name="email_option" value="custom" <?= set_radio('email_option', 'custom'); ?>>
+                                <label class="form-check-label" for="customEmail" style="margin-bottom: 13px !important;">Buat username Anda sendiri</label>
+                            </div>
+                        </div>
+                        <div id="customEmailField" class="mb-3 email-options">
+                            <div class=" col-md-12">
+                                <div class="form-group email-group">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="email_diajukan" style="z-index: 0;" name="email_diajukan" placeholder=" " value="<?= set_value('email_diajukan'); ?>" required>
+                                        <label for="email_diajukan" class="form-label">Username</label>
+                                        <span class="input-group-text" id="emailDomain">@if.unjani.ac.id</span>
+                                    </div>
+                                    <div id="emailValidationFeedback" class="feedback"></div>
+                                    <div id="emailAvailabilityFeedback" class="feedback"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="email" class="form-control" id="email_pengguna" name="email_pengguna" placeholder=" " value="<?= set_value('email_pengguna'); ?>" required>
+                                    <label for="email_pengguna" class="form-label">Email Pengguna</label>
+                                    <div id="emailPenggunaFeedback" class="feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="file" class="form-control" id="ktm" name="ktm" placeholder=" " accept=".jpeg,.jpg,.png,.pdf" required>
+                                    <label for="ktm" class="form-label" style="padding-bottom: 0px;">Kartu Tanda Mahasiswa (KTM)</label>
+                                    <div id="ktmFeedback" class="feedback"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="recaptcha-token" name="recaptcha-token">
+                        <button type="submit" class="btn btn-form btn-block">Kirim
+                            <div class="spinner-border"></div>
+                        </button>
+                        <?= form_close(); ?>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="email" class="form-control" id="email_pengguna" name="email_pengguna" placeholder=" " value="<?= set_value('email_pengguna'); ?>" required>
-                                <label for="email_pengguna" class="form-label">Email Pengguna</label>
-                                <div id="emailPenggunaFeedback" class="feedback"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="file" class="form-control" id="ktm" name="ktm" placeholder=" " accept=".jpeg,.jpg,.png,.pdf" required>
-                                <label for="ktm" class="form-label" style="padding-bottom: 0px;">Kartu Tanda Mahasiswa (KTM)</label>
-                                <div id="ktmFeedback" class="feedback"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <input type="hidden" id="recaptcha-token" name="recaptcha-token">
-                    <button type="submit" class="btn btn-form btn-block">Kirim<div class="spinner-border"></div></button>
-                    <?= form_close(); ?>
                 </div>
             </div>
         </div>
@@ -666,15 +691,15 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body text-center">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> <!-- Close button -->
                     <?php if ($this->session->flashdata('success')): ?>
                         <i class="fas fa-check-circle" style="color: #13855c;"></i>
-                        <p class="status-text">Terkirim!</p>
-                        <p><?= $this->session->flashdata('success'); ?></p>
+                        <p class="status-text">Terkirim!</p> <!-- Green success text -->
+                        <p><?= $this->session->flashdata('success'); ?></p> <!-- Flashdata text, default color -->
                     <?php elseif ($this->session->flashdata('error')): ?>
                         <i class="fas fa-exclamation-circle" style="color: #d9534f;"></i>
-                        <p class="status-text error">Gagal Terkirim!</p>
-                        <p><?= $this->session->flashdata('error'); ?></p>
+                        <p class="status-text error">Gagal Terkirim!</p> <!-- Red error text -->
+                        <p><?= $this->session->flashdata('error'); ?></p> <!-- Flashdata text, default color -->
                     <?php endif; ?>
                     <button type="button" class="btn <?= $this->session->flashdata('error') ? 'btn-error' : 'btn-success'; ?>" data-bs-dismiss="modal">Tutup</button>
                 </div>
@@ -687,14 +712,22 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=6Lf0PEQqAAAAANCvF8-NRJwRcVHMZDMbSD84j7gZ"></script>
     <script>
+        document.querySelector('.navbar-toggler').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.querySelector('form');
 
             const nimInput = document.getElementById('nim');
             const nimFeedback = document.getElementById('nimValidationFeedback');
 
-            const namaLengkapInput = document.getElementById('nama_lengkap');
-            const namaLengkapFeedback = document.getElementById('namaLengkapFeedback');
+            const namaDepanInput = document.getElementById('nama_depan');
+            const namaDepanFeedback = document.getElementById('namaDepanFeedback');
+
+            const namaBelakangInput = document.getElementById('nama_belakang');
+            const namaBelakangFeedback = document.getElementById('namaBelakangFeedback');
 
             const customEmailOption = document.getElementById('customEmail');
             const emailInput = document.getElementById('email_diajukan');
@@ -710,6 +743,7 @@
 
             nimInput.addEventListener('input', function() {
                 const nimValue = nimInput.value;
+
                 if (nimValue.length > 0) {
                     checkNimAvailability(nimValue);
                 } else {
@@ -738,15 +772,30 @@
                 });
             }
 
-            namaLengkapInput.addEventListener('input', function() {
-                if (namaLengkapInput.value === '') {
-                    namaLengkapFeedback.textContent = '';
-                } else if (!/^[A-Za-z\s]+$/.test(namaLengkapInput.value)) {
-                    namaLengkapFeedback.textContent = 'Nama lengkap hanya boleh berisi huruf dan spasi.';
-                    namaLengkapFeedback.className = 'feedback error';
+            namaDepanInput.addEventListener('input', function() {
+                if (namaDepanInput.value === '') {
+                    // Kosongkan feedback jika input kosong
+                    namaDepanFeedback.textContent = '';
+                } else if (!/^[A-Za-z\s]+$/.test(namaDepanInput.value)) {
+                    namaDepanFeedback.textContent = 'Nama depan hanya boleh berisi huruf dan spasi.';
+                    namaDepanFeedback.className = 'feedback error';
                 } else {
-                    namaLengkapFeedback.textContent = '';
-                    namaLengkapInput.classList.remove('error-border');
+                    namaDepanFeedback.textContent = '';
+                    namaDepanInput.classList.remove('error-border');
+                }
+            });
+
+            // Validasi Nama Belakang
+            namaBelakangInput.addEventListener('input', function() {
+                if (namaBelakangInput.value === '') {
+                    // Kosongkan feedback jika input kosong
+                    namaBelakangFeedback.textContent = '';
+                } else if (!/^[A-Za-z\s]+$/.test(namaBelakangInput.value)) {
+                    namaBelakangFeedback.textContent = 'Nama belakang hanya boleh berisi huruf dan spasi.';
+                    namaBelakangFeedback.className = 'feedback error';
+                } else {
+                    namaBelakangFeedback.textContent = '';
+                    namaBelakangInput.classList.remove('error-border');
                 }
             });
 
@@ -760,7 +809,7 @@
                 }
             }
 
-            $('#prodi, #nama_lengkap').on('change keyup', updateDomain);
+            $('#prodi, #nama_depan, #nama_belakang').on('change keyup', updateDomain);
             $('#customEmail').change(toggleEmailField);
             $('#emailSuggestions').on('change', 'input[name="email_option"]', function() {
                 toggleEmailField();
@@ -796,6 +845,7 @@
 
             emailInput.addEventListener('input', function() {
                 const emailValue = emailInput.value;
+
                 const lengthPattern = /^.{6,30}$/;
                 const contentPattern = /^[a-z0-9.]+$/;
                 const consecutiveDotPattern = /\.\./;
@@ -837,7 +887,8 @@
                         data: {
                             email_prefix: emailPrefix,
                             prodi: prodi,
-                            nama_lengkap: $('#nama_lengkap').val()
+                            nama_depan: $('#nama_depan').val(),
+                            nama_belakang: $('#nama_belakang').val()
                         },
                         success: function(response) {
                             var availabilityFeedback = '';
@@ -860,26 +911,14 @@
                 }
             }
 
+            // Validasi Email Pengguna
             emailPenggunaInput.addEventListener('input', function() {
-                const emailValue = emailPenggunaInput.value;
-                const lengthPattern = /^.{6,30}$/;
-                const contentPattern = /^[a-z0-9.@]+$/;
-                const consecutiveDotPattern = /\.\./;
-                const startEndDotPattern = /^\.|\.$/;
-
-                if (emailValue === '') {
+                const emailPattern = /^[a-z0-9.@]+$/;
+                if (emailPenggunaInput.value === '') {
+                    // Kosongkan feedback jika input kosong
                     emailPenggunaFeedback.textContent = '';
-                } else if (!contentPattern.test(emailValue)) {
-                    emailPenggunaFeedback.textContent = 'Hanya huruf (a-z), angka (0-9), dan tanda titik (.) yang diizinkan.';
-                    emailPenggunaFeedback.className = 'feedback error';
-                } else if (startEndDotPattern.test(emailValue)) {
-                    emailPenggunaFeedback.textContent = 'Tanda titik (.) tidak boleh di awal atau di akhir username.';
-                    emailPenggunaFeedback.className = 'feedback error';
-                } else if (!lengthPattern.test(emailValue)) {
-                    emailPenggunaFeedback.textContent = 'Email harus terdiri dari 6-30 karakter.';
-                    emailPenggunaFeedback.className = 'feedback error';
-                } else if (consecutiveDotPattern.test(emailValue)) {
-                    emailPenggunaFeedback.textContent = 'Tanda titik (.) tidak boleh berurutan.';
+                } else if (!emailPattern.test(emailPenggunaInput.value)) {
+                    emailPenggunaFeedback.textContent = 'Email hanya boleh berisi huruf (a-z), angka(0-9), dan (.)';
                     emailPenggunaFeedback.className = 'feedback error';
                 } else {
                     emailPenggunaFeedback.textContent = '';
@@ -887,6 +926,7 @@
                 }
             });
 
+            // Validasi KTM (hanya format file png, jpg, jpeg)
             ktmInput.addEventListener('change', function() {
                 const file = ktmInput.files[0];
                 const allowedExtensions = ['image/jpeg', 'image/png', 'image/jpg'];
@@ -901,10 +941,13 @@
 
             form.addEventListener('submit', function(event) {
                 event.preventDefault();
+
                 const emailAvailabilityFeedback = document.getElementById('emailAvailabilityFeedback');
                 const nimAvailabilityFeedback = nimFeedback.textContent; // Ambil pesan validasi NIM
+
                 let hasError = false;
 
+                // Cek apakah email sudah terdaftar
                 if (emailAvailabilityFeedback.textContent.includes('Username sudah terdaftar')) {
                     emailInput.classList.add('shake', 'error-border');
                     document.querySelector('label[for="email_diajukan"]').classList.add('shake');
@@ -916,10 +959,12 @@
                     hasError = true;
                 }
 
+                // Cek apakah ada feedback error untuk email
                 if (validationFeedback.textContent.includes('Nama pengguna yang diajukan harus terdiri dari 6-30 karakter.') ||
                     validationFeedback.textContent.includes('Hanya huruf (a-z), angka (0-9), dan tanda titik (.) yang diizinkan.') ||
                     validationFeedback.textContent.includes('Tanda titik (.) tidak boleh di awal atau di akhir username.') ||
                     validationFeedback.textContent.includes('Tanda titik (.) tidak boleh berurutan.')) {
+
                     emailInput.classList.add('shake', 'error-border');
                     document.querySelector('label[for="email_diajukan"]').classList.add('shake');
 
@@ -931,6 +976,7 @@
                     hasError = true;
                 }
 
+                // NIM validation
                 if (nimFeedback.textContent.includes('NIM sudah terdaftar')) {
                     nimInput.classList.add('shake', 'error-border');
                     document.querySelector('label[for="nim"]').classList.add('shake', 'error-border');
@@ -942,17 +988,30 @@
                     hasError = true;
                 }
 
-                if (namaLengkapFeedback.textContent.includes('Nama lengkap hanya boleh berisi huruf dan spasi.')) {
-                    namaLengkapInput.classList.add('shake', 'error-border');
-                    document.querySelector('label[for="nama_lengkap"]').classList.add('shake', 'error-border');
+                if (namaDepanFeedback.textContent.includes('Nama depan hanya boleh berisi huruf dan spasi.')) {
+                    namaDepanInput.classList.add('shake', 'error-border');
+                    document.querySelector('label[for="nama_depan"]').classList.add('shake', 'error-border');
 
                     setTimeout(() => {
-                        namaLengkapInput.classList.remove('shake');
-                        document.querySelector('label[for="nama_lengkap"]').classList.remove('shake');
+                        namaDepanInput.classList.remove('shake');
+                        document.querySelector('label[for="nama_depan"]').classList.remove('shake');
                     }, 500);
                     hasError = true;
                 }
 
+                // Nama Belakang validation
+                if (namaBelakangFeedback.textContent.includes('Nama belakang hanya boleh berisi huruf dan spasi.')) {
+                    namaBelakangInput.classList.add('shake', 'error-border');
+                    document.querySelector('label[for="nama_belakang"]').classList.add('shake', 'error-border');
+
+                    setTimeout(() => {
+                        namaBelakangInput.classList.remove('shake');
+                        document.querySelector('label[for="nama_belakang"]').classList.remove('shake');
+                    }, 500);
+                    hasError = true;
+                }
+
+                // Email Pengguna validation
                 if (emailPenggunaFeedback.textContent.includes('Email hanya boleh berisi huruf (a-z), angka(0-9), dan (.)')) {
                     emailPenggunaInput.classList.add('shake', 'error-border');
                     document.querySelector('label[for="email_pengguna"]').classList.add('shake', 'error-border');
@@ -964,6 +1023,7 @@
                     hasError = true;
                 }
 
+                // KTM validation
                 if (ktmFeedback.textContent.includes('File KTM harus dalam format .png, .jpg, atau .jpeg.')) {
                     ktmInput.classList.add('shake', 'error-border');
                     document.querySelector('label[for="ktm"]').classList.add('shake', 'error-border');
@@ -975,6 +1035,7 @@
                     hasError = true;
                 }
 
+                // Jika tidak ada error, kirim form
                 if (!hasError) {
                     const submitButton = event.target.querySelector('.btn-form');
                     submitButton.classList.add('loading');
@@ -996,147 +1057,31 @@
                     case 'Teknik Elektro S-1':
                         domain = '@te.unjani.ac.id';
                         break;
-                    case 'Teknik Kimia S-1':
-                        domain = '@student.unjani.ac.id';
-                        break;
-                    case 'Teknik Sipil S-1':
-                        domain = '@ts.unjani.ac.id';
-                        break;
-                    case 'Magister Teknik Sipil S-2':
-                        domain = '@mts.unjani.ac.id';
-                        break;
-                    case 'Teknik Geomatika S-1':
-                        domain = '@student.unjani.ac.id';
-                        break;
-                    case 'Teknik Mesin S-1':
-                        domain = '@tms.unjani.ac.id';
-                        break;
-                    case 'Teknik Industri S-1':
-                        domain = '@ti.unjani.ac.id';
-                        break;
-                    case 'Teknik Metalurgi S-1':
-                        domain = '@tme.unjani.ac.id';
-                        break;
-                    case 'Magister Manajemen Teknologi S-2':
-                        domain = '@mmt.unjani.ac.id';
-                        break;
-                    case 'Akuntansi S-1':
-                        domain = '@ak.unjani.ac.id';
-                        break;
-                    case 'Manajemen S-1':
-                        domain = '@mn.unjani.ac.id';
-                        break;
-                    case 'Magister Manajemen S-2':
-                        domain = '@mm.unjani.ac.id';
-                        break;
-                    case 'Ilmu Pemerintahan S-1':
-                        domain = '@ip.unjani.ac.id';
-                        break;
-                    case 'Ilmu Hubungan Internasional S-1':
-                        domain = '@hi.unjani.ac.id';
-                        break;
-                    case 'Magister Hubungan Internasional S-2':
-                        domain = '@mhi.unjani.ac.id';
-                        break;
-                    case 'Ilmu Hukum S-1':
-                        domain = '@hk.unjani.ac.id';
-                        break;
-                    case 'Magister Ilmu Pemerintahan S-2':
-                        domain = '@mip.unjani.ac.id';
-                        break;
-                    case 'Kimia S-1':
-                        domain = '@ki.unjani.ac.id';
-                        break;
-                    case 'Magister Kimia S-2':
-                        domain = '@mk.unjani.ac.id';
-                        break;
-                    case 'Informatika S-1':
-                        domain = '@if.unjani.ac.id';
-                        break;
-                    case 'Sistem Informasi S-1':
-                        domain = '@si.unjani.ac.id';
-                        break;
-                    case 'Psikologi S-1':
-                        domain = '@ps.unjani.ac.id';
-                        break;
-                    case 'Farmasi S-1':
-                        domain = '@fa.unjani.ac.id';
-                        break;
-                    case 'Profesi Apoteker':
-                        domain = '@student.unjani.ac.id';
-                        break;
-                    case 'Magister Farmasi S-2':
-                        domain = '@student.unjani.ac.id';
-                        break;
-                    case 'Pendidikan Dokter S-1':
-                        domain = '@fk.unjani.ac.id';
-                        break;
-                    case 'Profesi Dokter':
-                        domain = '@fk.unjani.ac.id';
-                        break;
-                    case 'Administrasi Rumah Sakit S-1':
-                        domain = '@fk.unjani.ac.id';
-                        break;
-                    case 'Magister Penuaan Kulit dan Estetika S-2':
-                        domain = '@student.unjani.ac.id';
-                        break;
-                    case 'Kedokteran Gigi S-1':
-                        domain = '@fkg.unjani.ac.id';
-                        break;
-                    case 'Profesi Dokter Gigi':
-                        domain = '@fkg.unjani.ac.id';
-                        break;
-                    case 'Magister Keperawatan S-2':
-                        domain = '@fts.unjani.ac.id';
-                        break;
-                    case 'Profesi Ners':
-                        domain = '@fts.unjani.ac.id';
-                        break;
-                    case 'Ilmu Keperawatan S-1':
-                        domain = '@fts.unjani.ac.id';
-                        break;
-                    case 'Keperawatan D-3':
-                        domain = '@fts.unjani.ac.id';
-                        break;
-                    case 'Kesehatan Masyarakat S-1':
-                        domain = '@student.unjani.ac.id';
-                        break;
-                    case 'Magister Kesehatan Masyarakat S-2':
-                        domain = '@student.unjani.ac.id';
-                        break;
-                    case 'Teknologi Laboratorium Medis D-4':
-                        domain = '@student.unjani.ac.id';
-                        break;
-                    case 'Teknologi Laboratorium Medis D-3':
-                        domain = '@student.unjani.ac.id';
-                        break;
-                    case 'Kebidanan S-1':
-                        domain = '@fts.unjani.ac.id';
-                        break;
-                    case 'Profesi Bidan':
-                        domain = '@fts.unjani.ac.id';
-                        break;
-                    case 'Kebidanan D-3':
-                        domain = '@fts.unjani.ac.id';
-                        break;
+                        // dst...
                     default:
                         domain = '@student.unjani.ac.id';
                         break;
+
                 }
                 $('#emailDomain').text(domain);
                 updateSuggestions();
             }
 
             function updateSuggestions() {
-                var namaLengkap = $('#nama_lengkap').val();
+                var namaDepan = $('#nama_depan').val();
+                var namaBelakang = $('#nama_belakang').val();
                 var prodi = $('#prodi').val();
-                var isNamaLengkapValid = /^[A-Za-z\s]+$/.test(namaLengkap.trim());
-                if (isNamaLengkapValid && prodi.trim()) {
+
+                var isNamaDepanValid = /^[A-Za-z\s]+$/.test(namaDepan.trim());
+                var isNamaBelakangValid = /^[A-Za-z\s]+$/.test(namaBelakang.trim());
+
+                if (isNamaDepanValid && isNamaBelakangValid && prodi.trim()) {
                     $.ajax({
                         url: '<?= base_url('EmailController/generateSuggestions'); ?>',
                         type: 'POST',
                         data: {
-                            nama_lengkap: namaLengkap,
+                            nama_depan: namaDepan,
+                            nama_belakang: namaBelakang,
                             prodi: prodi
                         },
                         success: function(response) {
@@ -1169,6 +1114,7 @@
             <?php if ($this->session->flashdata('success') || $this->session->flashdata('error')): ?>
                 var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
                 messageModal.show();
+
                 document.getElementById('messageModal').addEventListener('hidden.bs.modal', function() {
                     location.reload();
                 });
@@ -1180,20 +1126,6 @@
                 }).then(function(token) {
                     document.getElementById('recaptcha-token').value = token;
                 });
-            });
-
-            const toggler = document.querySelector('.navbar-toggler');
-            const sidebar = document.getElementById('sidebar');
-
-            toggler.addEventListener('click', function(event) {
-                sidebar.classList.toggle('show');
-                event.stopPropagation();
-            });
-
-            document.addEventListener('click', function(event) {
-                if (!sidebar.contains(event.target) && !toggler.contains(event.target)) {
-                    sidebar.classList.remove('show');
-                }
             });
         });
     </script>

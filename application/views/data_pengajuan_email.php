@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" type="text/css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/startbootstrap-sb-admin-2@4.0.5/css/sb-admin-2.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -101,6 +101,7 @@
 
         #content {
             padding-top: 100px;
+            background-color: #e0f5ec;
         }
 
         #content-wrapper {
@@ -138,11 +139,12 @@
         }
 
         .tab-content {
-            border: 1px solid #1cc88a;
+            border-radius: 5px;
             padding: 25px;
             background-color: #ffffff;
             margin-bottom: 30px;
             overflow-x: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
         .table {
@@ -183,17 +185,18 @@
 
         .table td:nth-child(1),
         .table td:nth-child(7),
-        .table td:nth-child(9) {
+        .table td:nth-child(9),
+        .table td:nth-child(10) {
             text-align: center;
         }
 
         .ktm-icon {
             cursor: pointer;
-            color: #007bff;
+            color: #333;
         }
 
         .ktm-icon:hover {
-            color: #0056b3;
+            color: #0e6b47;
         }
 
         .custom-process-btn {
@@ -203,31 +206,32 @@
         }
 
         .custom-process-btn:hover {
-            background-color: #2e59d9;
+            background-color: #0088cc;
             color: #ffffff;
             border: none;
         }
 
         .custom-verify-btn {
-            background-color: #f6c23e;
+            background-color: #00aaff;
             color: #ffffff;
             border: none;
         }
 
         .custom-verify-btn:hover {
-            background-color: #f4b619;
+            background-color: #0088cc;
             color: #ffffff;
             border: none;
         }
 
-        .send-email-btn {
-            background-color: #1cc88a;
+        .send-email-btn,
+        .send-email-btn:focus {
+            background-color: #00aaff;
             color: #ffffff;
             border: none;
         }
 
         .send-email-btn:hover {
-            background-color: #17a673;
+            background-color: #0088cc;
             color: #ffffff;
             border: none;
         }
@@ -246,6 +250,7 @@
 
         .modal-ktm .modal-body {
             overflow: hidden;
+            padding: 0;
         }
 
         .modal-ktm .modal-body img {
@@ -277,6 +282,10 @@
             color: #aaa;
             font-size: 15px;
             cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 5px;
         }
 
         .modal-body {
@@ -372,13 +381,6 @@
                 </div>
                 <div class="sidebar-brand-text">Access Track</div>
             </a>
-            <hr class="sidebar-divider my-0">
-            <li class="nav-item">
-                <a class="nav-link" href="<?= site_url('AdminPengajuanController'); ?>">
-                    <i class="fas fa-home"></i>
-                    <span>Home</span>
-                </a>
-            </li>
             <hr class="sidebar-divider">
             <div class="sidebar-heading">Laporan</div>
             <li class="nav-item active">
@@ -405,17 +407,6 @@
                         <i class="fa fa-bars"></i>
                     </button>
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <span class="badge badge-danger badge-counter" id="notification-count">0</span>
-                            </a>
-                            <div class="dropdown-list dropdown-menu shadow animated--grow-in" aria-labelledby="alertsDropdown" style="right: 0 !important; left: auto !important;">
-                                <h6 class="dropdown-header">Notifikasi</h6>
-                                <div id="notification-list"></div>
-                                <a class="dropdown-item text-center small text-gray-500" id="clear-all" href="#">Clear All</a>
-                            </div>
-                        </li>
                         <div class="topbar-divider d-none d-sm-block"></div>
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -435,7 +426,7 @@
                     </ul>
                 </nav>
 
-                <div class="container-fluid" style="padding-left: 20px; padding-right: 20px;">
+                <div class="container-fluid">
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">DASHBOARD</h1>
                         <div class="dropdown">
@@ -490,6 +481,8 @@
                                         <th>Tanggal Pengajuan</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
+                                        <th>Edit</th>
+                                        <th>Hapus</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -499,7 +492,7 @@
                                             <td><?= $no++; ?></td>
                                             <td><?= $email['prodi']; ?></td>
                                             <td><?= $email['nim']; ?></td>
-                                            <td><?= $email['nama_depan'] . ' ' . $email['nama_belakang']; ?></td>
+                                            <td><?= $email['nama_lengkap']; ?></td>
                                             <td><?= $email['email_diajukan']; ?></td>
                                             <td><?= $email['email_pengguna']; ?></td>
                                             <td>
@@ -513,8 +506,20 @@
                                                 <form method="post" action="<?= site_url('AdminPengajuanController/updateStatusEmail'); ?>">
                                                     <input type="hidden" name="id" value="<?= $email['nim']; ?>">
                                                     <input type="hidden" name="status_pengajuan" value="Diproses">
-                                                    <button type="submit" class="btn custom-process-btn">Proses Email</button>
+                                                    <button type="submit" class="btn custom-process-btn">Proses</button>
                                                 </form>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-warning" style="color: #ffffff;" data-toggle="modal" data-target="#editModal"
+                                                    data-id="<?= $email['nim']; ?>"
+                                                    data-prodi="<?= $email['prodi']; ?>"
+                                                    data-nama-lengkap="<?= $email['nama_lengkap']; ?>"
+                                                    data-email="<?= $email['email_diajukan']; ?>"
+                                                    data-email-pengguna="<?= $email['email_pengguna']; ?>"
+                                                    data-ktm="<?= $email['ktm']; ?>">Edit</button>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-id="<?= $email['nim']; ?>">Hapus</button>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -536,6 +541,8 @@
                                         <th>Tanggal Pengajuan</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
+                                        <th>Edit</th>
+                                        <th>Hapus</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -545,7 +552,7 @@
                                             <td><?= $no++; ?></td>
                                             <td><?= $email['prodi']; ?></td>
                                             <td><?= $email['nim']; ?></td>
-                                            <td><?= $email['nama_depan'] . ' ' . $email['nama_belakang']; ?></td>
+                                            <td><?= $email['nama_lengkap']; ?></td>
                                             <td><?= $email['email_diajukan']; ?></td>
                                             <td><?= $email['email_pengguna']; ?></td>
                                             <td>
@@ -559,8 +566,20 @@
                                                 <form method="post" action="<?= site_url('AdminPengajuanController/updateStatusEmail'); ?>">
                                                     <input type="hidden" name="id" value="<?= $email['nim']; ?>">
                                                     <input type="hidden" name="status_pengajuan" value="Diverifikasi">
-                                                    <button type="submit" class="btn custom-verify-btn">Verifikasi Email</button>
+                                                    <button type="submit" class="btn custom-verify-btn">Verifikasi</button>
                                                 </form>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-warning" style="color: #ffffff;" data-toggle="modal" data-target="#editModal"
+                                                    data-id="<?= $email['nim']; ?>"
+                                                    data-prodi="<?= $email['prodi']; ?>"
+                                                    data-nama-lengkap="<?= $email['nama_lengkap']; ?>"
+                                                    data-email="<?= $email['email_diajukan']; ?>"
+                                                    data-email-pengguna="<?= $email['email_pengguna']; ?>"
+                                                    data-ktm="<?= $email['ktm']; ?>">Edit</button>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-id="<?= $email['nim']; ?>">Hapus</button>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -582,6 +601,8 @@
                                         <th>Tanggal Pengajuan</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
+                                        <th>Edit</th>
+                                        <th>Hapus</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -591,7 +612,7 @@
                                             <td><?= $no++; ?></td>
                                             <td><?= $email['prodi']; ?></td>
                                             <td><?= $email['nim']; ?></td>
-                                            <td><?= $email['nama_depan'] . ' ' . $email['nama_belakang']; ?></td>
+                                            <td><?= $email['nama_lengkap']; ?></td>
                                             <td><?= $email['email_diajukan']; ?></td>
                                             <td><?= $email['email_pengguna']; ?></td>
                                             <td>
@@ -606,7 +627,7 @@
                                                     <button class="btn send-email-btn dropdown-toggle" type="button" id="dropdownFormButton" data-bs-toggle="dropdown" aria-expanded="false">
                                                         Kirim Email
                                                     </button>
-                                                    <div class="dropdown-menu p-4" aria-labelledby="dropdownFormButton">
+                                                    <div class="dropdown-menu p-4 dropdown-kirim" aria-labelledby="dropdownFormButton">
                                                         <form id="passwordForm" method="post" action="<?= site_url('AdminPengajuanController/sendEmailWithPassword'); ?>">
                                                             <input type="hidden" name="id" value="<?= $email['nim']; ?>">
                                                             <div class="mb-3">
@@ -618,10 +639,22 @@
                                                                 <input type="text" class="form-control" id="password-<?= $email['nim']; ?>" name="password" required>
                                                             </div>
 
-                                                            <button type="submit" class="btn btn-primary w-100">Kirim Email</button>
+                                                            <button type="submit" class="btn btn-primary send-btn w-100">Kirim</button>
                                                         </form>
                                                     </div>
                                                 </div>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-warning" style="color: #ffffff;" data-toggle="modal" data-target="#editModal"
+                                                    data-id="<?= $email['nim']; ?>"
+                                                    data-prodi="<?= $email['prodi']; ?>"
+                                                    data-nama-lengkap="<?= $email['nama_lengkap']; ?>"
+                                                    data-email="<?= $email['email_diajukan']; ?>"
+                                                    data-email-pengguna="<?= $email['email_pengguna']; ?>"
+                                                    data-ktm="<?= $email['ktm']; ?>">Edit</button>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-id="<?= $email['nim']; ?>">Hapus</button>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -629,9 +662,8 @@
                             </table>
                         </div>
 
-
                         <div class="tab-pane fade" id="dikirim" role="tabpanel" aria-labelledby="dikirim-tab">
-                            <table id="dikirimTable" class="table table-bordered dataTable table-responsive">
+                            <table id="dikirimTable" class="table table-bordered table-responsive">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -643,6 +675,8 @@
                                         <th>KTM</th>
                                         <th>Tanggal Pengajuan</th>
                                         <th>Status</th>
+                                        <th>Edit</th>
+                                        <th>Hapus</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -652,7 +686,7 @@
                                             <td><?= $no++; ?></td>
                                             <td><?= $email['prodi']; ?></td>
                                             <td><?= $email['nim']; ?></td>
-                                            <td><?= $email['nama_depan'] . ' ' . $email['nama_belakang']; ?></td>
+                                            <td><?= $email['nama_lengkap']; ?></td>
                                             <td><?= $email['email_diajukan']; ?></td>
                                             <td><?= $email['email_pengguna']; ?></td>
                                             <td>
@@ -662,6 +696,18 @@
                                             </td>
                                             <td><?= $email['tgl_pengajuan']; ?></td>
                                             <td><?= $email['status_pengajuan']; ?></td>
+                                            <td>
+                                                <button class="btn btn-warning" style="color: #ffffff;" data-toggle="modal" data-target="#editModal"
+                                                    data-id="<?= $email['nim']; ?>"
+                                                    data-nama-lengkap="<?= $email['nama_lengkap']; ?>"
+                                                    data-email="<?= $email['email_diajukan']; ?>"
+                                                    data-email-pengguna="<?= $email['email_pengguna']; ?>"
+                                                    data-prodi="<?= $email['prodi']; ?>"
+                                                    data-ktm="<?= $email['ktm']; ?>">Edit</button>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-id="<?= $email['nim']; ?>">Hapus</button>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -690,8 +736,8 @@
                                 <li><a class="dropdown-item" href="#" id="downloadJpeg">Download JPEG</a></li>
                             </ul>
                         </div>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <i class="fas fa-times"></i>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body text-center">
@@ -715,15 +761,125 @@
             </div>
         </div>
 
+        <!-- Modal Edit -->
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm" role="document" style="width: 100%; max-width: 700px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Edit Pengajuan</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="editForm" method="post" action="<?= site_url('AdminPengajuanController/editPengajuanEmail'); ?>">
+                        <div class="modal-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="editNim">Nomor Induk Mahasiswa (NIM)</label>
+                                        <input type="text" class="form-control" id="editNim" disabled>
+                                        <input type="hidden" name="nim" id="hiddenEditNim">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="editProdi">Program Studi</label>
+                                        <select class="form-select" id="editProdi" name="prodi" required>
+                                            <option value=""></option>
+                                            <?php foreach ($program_studi as $value => $label): ?>
+                                                <option value="<?= $value; ?>"><?= $label; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="editNamaLengkap">Nama Lengkap</label>
+                                        <input type="text" class="form-control" id="editNamaLengkap" name="nama_lengkap" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="editEmail">Email yang Diajukan</label>
+                                        <input type="email" class="form-control" id="editEmail" name="email_diajukan" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="editEmailPengguna">Email Pengguna</label>
+                                        <input type="email" class="form-control" id="editEmailPengguna" name="email_pengguna" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Apakah Anda yakin ingin menghapus pengajuan ini?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <form id="deleteForm" method="post" action="<?= site_url('AdminPengajuanController/deletePengajuanEmail'); ?>">
+                            <input type="hidden" name="id" id="deleteId">
+                            <button type="submit" class="btn btn-danger">Hapus</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Konfirmasi Aksi -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmModalLabel">Konfirmasi Aksi</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modalBody">
+                        Apakah Anda yakin ingin melanjutkan aksi ini?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-primary" id="confirmActionBtn">Ya</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Logout Modal-->
         <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-sm">
                 <div class="modal-content">
                     <div class="modal-body text-center">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> <!-- Close button -->
-                        <i class="fas fa-exclamation-circle" style="color: #d9534f; font-size: 100px; margin-top: 30px;"></i> <!-- Circle exclamation icon -->
-                        <p class="status-text">Konfirmasi Logout</p> <!-- Status text -->
-                        <p>Apakah Anda yakin ingin keluar dari halaman ini?</p> <!-- Confirmation text -->
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <i class="fas fa-exclamation-circle" style="color: #d9534f; font-size: 100px; margin-top: 30px;"></i>
+                        <p class="status-text">Konfirmasi Logout</p>
+                        <p>Apakah Anda yakin ingin keluar dari halaman ini?</p>
                         <a class="btn btn-ya" href="<?= site_url('LoginPengajuanController/logout'); ?>">Ya</a>
                         <button type="button" class="btn btn-tidak" data-bs-dismiss="modal">Tidak</button>
                     </div>
@@ -742,6 +898,55 @@
 
         <script>
             $(document).ready(function() {
+                $('#deleteModal').on('show.bs.modal', function(event) {
+                    var button = $(event.relatedTarget);
+                    var id = button.data('id');
+                    var modal = $(this);
+                    modal.find('#deleteId').val(id);
+                });
+
+                $('#editModal').on('show.bs.modal', function(event) {
+                    var button = $(event.relatedTarget);
+                    var nim = button.data('id');
+                    var prodi = button.data('prodi');
+                    var nama_lengkap = button.data('nama-lengkap');
+                    var email = button.data('email');
+                    var emailPengguna = button.data('email-pengguna');
+                    var ktm = button.data('ktm');
+
+                    var modal = $(this);
+                    modal.find('#editNim').val(nim);
+                    modal.find('#hiddenEditNim').val(nim);
+                    modal.find('#editProdi').val(prodi);
+                    modal.find('#editNamaLengkap').val(nama_lengkap);
+                    modal.find('#editEmail').val(email);
+                    modal.find('#editEmailPengguna').val(emailPengguna);
+                });
+
+                var formToSubmit;
+
+                $('.custom-process-btn, .custom-verify-btn, .send-btn').on('click', function(e) {
+                    e.preventDefault();
+                    formToSubmit = $(this).closest('form');
+
+                    var actionText = '';
+                    if ($(this).hasClass('custom-process-btn')) {
+                        actionText = 'Apakah anda yakin ingin memproses pengajuan ini?';
+                    } else if ($(this).hasClass('custom-verify-btn')) {
+                        actionText = 'Apakah anda yakin ingin memverifikasi pengajuan ini?';
+                    } else if ($(this).hasClass('send-btn')) {
+                        actionText = 'Apakah Anda yakin ingin mengirimkan email ini?';
+                    }
+
+                    $('#modalBody').text(actionText);
+                    $('#confirmModal').modal('show');
+                });
+
+                $('#confirmActionBtn').on('click', function() {
+                    formToSubmit.submit();
+                    $('#confirmModal').modal('hide');
+                });
+
                 $('#diajukanTable, #diprosesTable, #diverifikasiTable, #dikirimTable').DataTable({
                     "pagingType": "simple_numbers",
                     "lengthMenu": [5, 10, 25, 50, 100],
@@ -872,6 +1077,15 @@
             }
 
             function createPrintDocument(data, title, monthYear) {
+                const currentDate = new Date();
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                const formattedDate = currentDate.toLocaleDateString('id-ID', options);
+
                 let printContent = `
     <div style="text-align: center;">
         <h2>Yayasan Kartika Eka Paksi</h2>
@@ -908,12 +1122,15 @@
             <td>${item.status}</td>
         </tr>`;
                 });
+                printContent += `</tbody></table>`;
                 printContent += `
-        </tbody>
-    </table>`;
-
+    <div style="position: relative; right: 0; bottom: 0; text-align: right; margin-top: 35px;">
+        <p>${formattedDate}</p>
+        <img src="<?= base_url('assets/img/ttd.jpg') ?>" alt="Signature" style="width: 100px; height: auto; margin-top: 10px; margin-bottom: 15px;" />
+        <p>Staf Administrasi SISFO UNJANI</p>
+    </div>`;
                 const printFrame = document.createElement('iframe');
-                printFrame.style.display = 'none'; // Sembunyikan iframe
+                printFrame.style.display = 'none';
                 document.body.appendChild(printFrame);
                 const printWindow = printFrame.contentWindow || printFrame.contentDocument.parentWindow;
                 printWindow.document.open();
@@ -922,7 +1139,7 @@
     <head>
         <title>Cetak Laporan</title>
         <style>
-            body { font-family: Arial, sans-serif; }
+            body { font-family: Arial, sans-serif; position: relative;}
             table { width: 100%; border-collapse: collapse; }
             th, td { padding: 8px; text-align: left; }
             th { background-color: #f2f2f2; text-align: center; }
@@ -941,41 +1158,35 @@
             document.addEventListener('DOMContentLoaded', function() {
                 activateSavedTab();
 
-                function loadNotifications() {
-                    fetch('<?= site_url('AdminPengajuanController/getNotifications'); ?>')
-                        .then(response => response.json())
-                        .then(data => {
-                            const notificationList = document.getElementById('notification-list');
-                            const notificationCount = document.getElementById('notification-count');
-                            notificationList.innerHTML = '';
-                            notificationCount.textContent = data.length;
-
-                            if (data.length === 0) {
-                                notificationList.innerHTML = '<a class="dropdown-item text-center small text-gray-500">No Notifications</a>';
-                                document.getElementById('clear-all').style.display = 'none';
-                            } else {
-                                data.forEach(notification => {
-                                    const item = document.createElement('a');
-                                    item.className = 'dropdown-item d-flex align-items-center';
-                                    item.href = '#';
-                                    item.innerHTML = `
-                                    <div class="mr-3">
-                                        <div class="icon-circle ${notification.type === 'email' ? 'bg-primary' : 'bg-secondary'}">
-                                            <i class="${notification.type === 'email' ? 'fas fa-envelope text-white' : 'fas fa-globe text-white'}"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">${notification.date}</div>
-                                        <span>${notification.user} mengajukan pembuatan ${notification.type === 'email' ? 'akun Email' : 'Sub Domain'}</span>
-                                    </div>
-                                `;
-                                    notificationList.appendChild(item);
-                                });
-
-                                document.getElementById('clear-all').style.display = 'block';
-                            }
-                        });
+                function saveActiveTab(tabId) {
+                    localStorage.setItem('activeTab', tabId);
                 }
+
+                function activateSavedTab() {
+                    const activeTabId = localStorage.getItem('activeTab');
+                    if (activeTabId) {
+                        const tabTrigger = document.querySelector(`button[data-bs-target="${activeTabId}"]`);
+                        if (tabTrigger) {
+                            const tab = new bootstrap.Tab(tabTrigger);
+                            tab.show();
+
+                            // Hide other tab panes
+                            const tabPanes = document.querySelectorAll('.tab-pane');
+                            tabPanes.forEach(pane => {
+                                pane.classList.remove('show', 'active');
+                            });
+                            const activePane = document.querySelector(activeTabId);
+                            if (activePane) {
+                                activePane.classList.add('show', 'active');
+                            }
+                        }
+                    }
+                }
+
+                document.addEventListener('shown.bs.tab', function(event) {
+                    const tabId = event.target.getAttribute('data-bs-target');
+                    saveActiveTab(tabId);
+                });
 
                 let zoomLevel = 1;
                 let rotation = 0;
@@ -1086,15 +1297,6 @@
                     ktmImage.style.cursor = 'default';
                 });
 
-                function clearAllNotifications() {
-                    fetch('<?= site_url('AdminPengajuanController/clearAllNotifications'); ?>', {
-                        method: 'POST'
-                    }).then(response => response.json()).then(() => loadNotifications());
-                }
-
-                document.getElementById('clear-all').addEventListener('click', clearAllNotifications);
-                loadNotifications();
-
                 const ktmIcons = document.querySelectorAll('.ktm-icon');
 
                 ktmIcons.forEach(icon => {
@@ -1108,26 +1310,6 @@
                         ktmModal.show();
                     });
                 });
-            });
-
-            function saveActiveTab(tabId) {
-                localStorage.setItem('activeTab', tabId);
-            }
-
-            function activateSavedTab() {
-                const activeTabId = localStorage.getItem('activeTab');
-                if (activeTabId) {
-                    const tabTrigger = document.querySelector(`button[data-bs-target="${activeTabId}"]`);
-                    if (tabTrigger) {
-                        const tab = new bootstrap.Tab(tabTrigger);
-                        tab.show();
-                    }
-                }
-            }
-
-            document.addEventListener('shown.bs.tab', function(event) {
-                const tabId = event.target.getAttribute('data-bs-target');
-                saveActiveTab(tabId);
             });
         </script>
 </body>

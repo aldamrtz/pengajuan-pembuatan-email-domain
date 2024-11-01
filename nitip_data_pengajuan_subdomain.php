@@ -101,7 +101,7 @@
 
         #content {
             padding-top: 100px;
-            background-color: #e0f5ec;
+            background: linear-gradient(135deg, #e0f5ec, #e0f5ec, #e0f5ec, #00aaff);
         }
 
         #content-wrapper {
@@ -248,10 +248,6 @@
             cursor: pointer;
         }
 
-        .form-group {
-            margin-bottom: 5px;
-        }
-
         .modal-body {
             padding: 30px;
         }
@@ -346,6 +342,13 @@
                 </div>
                 <div class="sidebar-brand-text">Access Track</div>
             </a>
+            <hr class="sidebar-divider my-0">
+            <li class="nav-item">
+                <a class="nav-link" href="<?= site_url('AdminPengajuanController'); ?>">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+            </li>
             <hr class="sidebar-divider">
             <div class="sidebar-heading">Laporan</div>
             <li class="nav-item">
@@ -372,6 +375,17 @@
                         <i class="fa fa-bars"></i>
                     </button>
                     <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bell fa-fw"></i>
+                                <span class="badge badge-danger badge-counter" id="notification-count">0</span>
+                            </a>
+                            <div class="dropdown-list dropdown-menu shadow animated--grow-in" aria-labelledby="alertsDropdown" style="right: 0 !important; left: auto !important;">
+                                <h6 class="dropdown-header">Notifikasi</h6>
+                                <div id="notification-list"></div>
+                                <a class="dropdown-item text-center small text-gray-500" id="clear-all" href="#">Clear All</a>
+                            </div>
+                        </li>
                         <div class="topbar-divider d-none d-sm-block"></div>
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -685,7 +699,7 @@
 
         <!-- Modal Edit -->
         <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document" style="width: 100%; max-width: 700px; margin-top: 100px; margin-bottom: 100px;">
+            <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editModalLabel">Edit Pengajuan</h5>
@@ -696,63 +710,37 @@
                     <form id="editForm" method="post" action="<?= site_url('AdminPengajuanController/editPengajuanSubdomain'); ?>">
                         <div class="modal-body">
                             <input type="hidden" name="id_pengajuan_subdomain" id="editId">
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="editNomorInduk">Nomor Induk</label>
-                                        <input type="text" class="form-control" id="editNomorInduk" name="nomor_induk" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="editUnitKerja">Unit Kerja</label>
-                                        <input type="text" class="form-control" id="editUnitKerja" name="unit_kerja" required>
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <label for="editNomorInduk">Nomor Induk</label>
+                                <input type="text" class="form-control" id="editNomorInduk" name="nomor_induk" required>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="editPenanggungJawab">Penanggung Jawab</label>
-                                        <input type="text" class="form-control" id="editPenanggungJawab" name="penanggung_jawab" required>
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <label for="editUnitKerja">Unit Kerja</label>
+                                <input type="text" class="form-control" id="editUnitKerja" name="unit_kerja" required>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="editEmailPenanggungJawab">Email Penanggung Jawab</label>
-                                        <input type="email" class="form-control" id="editEmailPenanggungJawab" name="email_penanggung_jawab" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="editKontakPenanggungJawab">Kontak Penanggung Jawab</label>
-                                        <input type="text" class="form-control" id="editKontakPenanggungJawab" name="kontak_penanggung_jawab" required>
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <label for="editPenanggungJawab">Penanggung Jawab</label>
+                                <input type="text" class="form-control" id="editPenanggungJawab" name="penanggung_jawab" required>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="editSubDomain">Sub Domain</label>
-                                        <input type="text" class="form-control" id="editSubDomain" name="sub_domain" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="editIpPointing">IP Pointing</label>
-                                        <input type="text" class="form-control" id="editIpPointing" name="ip_pointing" required>
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <label for="editEmailPenanggungJawab">Email Penanggung Jawab</label>
+                                <input type="email" class="form-control" id="editEmailPenanggungJawab" name="email_penanggung_jawab" required>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="editKeterangan">Keterangan</label>
-                                        <textarea type="text" class="form-control" id="editKeterangan" name="keterangan" rows="3" required></textarea>
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <label for="editKontakPenanggungJawab">Kontak Penanggung Jawab</label>
+                                <input type="email" class="form-control" id="editKontakPenanggungJawab" name="kontak_penanggung_jawab" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editSubDomain">Sub Domain</label>
+                                <input type="text" class="form-control" id="editSubDomain" name="sub_domain" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editIpPointing">IP Pointing</label>
+                                <input type="email" class="form-control" id="editIpPointing" name="ip_pointing" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editKeterangan">Keterangan</label>
+                                <input type="email" class="form-control" id="editKeterangan" name="keterangan" required>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -788,36 +776,15 @@
             </div>
         </div>
 
-        <!-- Modal Konfirmasi Aksi -->
-        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="confirmModalLabel">Konfirmasi Aksi</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body" id="modalBody">
-                        Apakah Anda yakin ingin melanjutkan aksi ini?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="button" class="btn btn-primary" id="confirmActionBtn">Ya</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Logout Modal-->
         <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-sm">
                 <div class="modal-content">
                     <div class="modal-body text-center">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <i class="fas fa-exclamation-circle" style="color: #d9534f; font-size: 100px; margin-top: 30px;"></i>
-                        <p class="status-text">Konfirmasi Logout</p>
-                        <p>Apakah Anda yakin ingin keluar dari halaman ini?</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> <!-- Close button -->
+                        <i class="fas fa-exclamation-circle" style="color: #d9534f; font-size: 100px; margin-top: 30px;"></i> <!-- Circle exclamation icon -->
+                        <p class="status-text">Konfirmasi Logout</p> <!-- Status text -->
+                        <p>Apakah Anda yakin ingin keluar dari halaman ini?</p> <!-- Confirmation text -->
                         <a class="btn btn-ya" href="<?= site_url('LoginPengajuanController/logout'); ?>">Ya</a>
                         <button type="button" class="btn btn-tidak" data-bs-dismiss="modal">Tidak</button>
                     </div>
@@ -864,30 +831,6 @@
                     modal.find('#editSubDomain').val(sub_domain);
                     modal.find('#editIpPointing').val(ip_pointing);
                     modal.find('#editKeterangan').val(keterangan);
-                });
-
-                var formToSubmit;
-
-                $('.custom-process-btn, .custom-verify-btn, .custom-send-btn').on('click', function(e) {
-                    e.preventDefault();
-                    formToSubmit = $(this).closest('form');
-
-                    var actionText = '';
-                    if ($(this).hasClass('custom-process-btn')) {
-                        actionText = 'Apakah anda yakin ingin memproses pengajuan ini?';
-                    } else if ($(this).hasClass('custom-verify-btn')) {
-                        actionText = 'Apakah anda yakin ingin memverifikasi pengajuan ini?';
-                    } else if ($(this).hasClass('custom-send-btn')) {
-                        actionText = 'Apakah Anda yakin ingin mengirimkan email ini?';
-                    }
-
-                    $('#modalBody').text(actionText);
-                    $('#confirmModal').modal('show');
-                });
-
-                $('#confirmActionBtn').on('click', function() {
-                    formToSubmit.submit();
-                    $('#confirmModal').modal('hide');
                 });
 
                 $('#diajukanTable, #diprosesTable, #diverifikasiTable, #dikirimTable').DataTable({
@@ -953,7 +896,7 @@
             function printTable(tableId, status, monthYear) {
                 const table = $(`#${tableId}`).DataTable(); // Use DataTable API
                 const data = prepareDataForPrint(table, status, monthYear);
-                createPrintDocument(data, status, monthYear);
+                createPrintDocument(data, status);
             }
 
             function printAllTables(monthYear) {
@@ -970,7 +913,7 @@
                     item.no = index + 1; // Nomor urut mulai dari 1
                 });
 
-                createPrintDocument(allData, 'Semua', monthYear);
+                createPrintDocument(allData, 'Semua');
             }
 
             function prepareDataForPrint(table, status, monthYear) {
@@ -1027,16 +970,7 @@
                 return formattedData;
             }
 
-            function createPrintDocument(data, title, monthYear) {
-                const currentDate = new Date();
-                const options = {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                };
-                const formattedDate = currentDate.toLocaleDateString('id-ID', options);
-
+            function createPrintDocument(data, title) {
                 let printContent = `
         <div style="text-align: center;">
             <h2>Yayasan Kartika Eka Paksi</h2>
@@ -1044,7 +978,7 @@
             <p>Kampus Cimahi: Jl. Terusan Jend. Sudirman, Cimahi Telp: (022) 1663186 - 6656, Fax: (022) 6652069</p>
             <p>Kampus Bandung: Jl. Gatot Subroto, Bandung Telp: (022) 7312741, Fax: (022) 7312741</p>
             <hr style="border: 1px solid black;"/>
-            <h4 style="margin-top: 35px; margin-bottom: 35px;">Data Pengajuan Pembuatan Subdomain - ${title} Pada Bulan ${monthYear}</h4>
+            <h4 style="margin-top: 35px; margin-bottom: 35px;">Data Pengajuan Pembuatan Email - ${title}</h4>
         </div>
         <table border="1" style="width: 100%; border-collapse: collapse;">
             <thead>
@@ -1080,13 +1014,9 @@
             </tr>`;
                 });
                 printContent += `</tbody></table>`;
-                printContent += `
-    <div style="position: relative; right: 0; bottom: 0; text-align: right; margin-top: 35px;">
-        <p>${formattedDate}</p>
-        <img src="<?= base_url('assets/img/ttd.jpg') ?>" alt="Signature" style="width: 100px; height: auto; margin-top: 10px; margin-bottom: 15px;" />
-        <p>Staf Administrasi SISFO UNJANI</p>
-    </div>`;
+
                 const printFrame = document.createElement('iframe');
+                printFrame.style.display = 'none'; // Sembunyikan iframe
                 document.body.appendChild(printFrame);
                 const printWindow = printFrame.contentWindow || printFrame.contentDocument.parentWindow;
                 printWindow.document.open();
@@ -1095,7 +1025,7 @@
         <head>
             <title>Cetak Laporan</title>
             <style>
-                body { font-family: Arial, sans-serif; position: relative;}
+                body { font-family: Arial, sans-serif; }
                 table { width: 100%; border-collapse: collapse; }
                 th, td { padding: 8px; text-align: left; }
                 th { background-color: #f2f2f2; text-align: center; }
@@ -1143,6 +1073,51 @@
                     const tabId = event.target.getAttribute('data-bs-target');
                     saveActiveTab(tabId);
                 });
+
+                function loadNotifications() {
+                    fetch('<?= site_url('AdminPengajuanController/getNotifications'); ?>')
+                        .then(response => response.json())
+                        .then(data => {
+                            const notificationList = document.getElementById('notification-list');
+                            const notificationCount = document.getElementById('notification-count');
+                            notificationList.innerHTML = '';
+                            notificationCount.textContent = data.length;
+
+                            if (data.length === 0) {
+                                notificationList.innerHTML = '<a class="dropdown-item text-center small text-gray-500">No Notifications</a>';
+                                document.getElementById('clear-all').style.display = 'none';
+                            } else {
+                                data.forEach(notification => {
+                                    const item = document.createElement('a');
+                                    item.className = 'dropdown-item d-flex align-items-center';
+                                    item.href = '#';
+                                    item.innerHTML = `
+                                    <div class="mr-3">
+                                        <div class="icon-circle ${notification.type === 'email' ? 'bg-primary' : 'bg-secondary'}">
+                                            <i class="${notification.type === 'email' ? 'fas fa-envelope text-white' : 'fas fa-globe text-white'}"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">${notification.date}</div>
+                                        <span>${notification.user} mengajukan pembuatan ${notification.type === 'email' ? 'akun Email' : 'Sub Domain'}</span>
+                                    </div>
+                                `;
+                                    notificationList.appendChild(item);
+                                });
+
+                                document.getElementById('clear-all').style.display = 'block';
+                            }
+                        });
+                }
+
+                function clearAllNotifications() {
+                    fetch('<?= site_url('AdminPengajuanController/clearAllNotifications'); ?>', {
+                        method: 'POST'
+                    }).then(response => response.json()).then(() => loadNotifications());
+                }
+
+                document.getElementById('clear-all').addEventListener('click', clearAllNotifications);
+                loadNotifications();
             });
         </script>
 </body>
